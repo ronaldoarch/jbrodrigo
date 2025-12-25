@@ -26,7 +26,10 @@ function setCorsHeaders() {
     // Verificar se a origem está na lista de permitidas
     if (!empty($origin) && in_array($origin, $allowedOrigins)) {
         header("Access-Control-Allow-Origin: $origin");
-    } elseif (empty($origin)) {
+    } elseif (!empty($origin)) {
+        // Se origem não está na lista, não permitir
+        // Mas ainda enviar headers básicos para evitar erros
+    } else {
         // Se não houver origem (requisição direta), permitir apenas em desenvolvimento
         if (getenv('APP_ENV') !== 'production') {
             header('Access-Control-Allow-Origin: *');
@@ -45,6 +48,8 @@ function setCorsHeaders() {
     }
 }
 
-// Chamar automaticamente
-setCorsHeaders();
+// Chamar automaticamente ANTES de qualquer output
+if (!headers_sent()) {
+    setCorsHeaders();
+}
 
