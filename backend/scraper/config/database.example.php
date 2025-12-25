@@ -12,34 +12,18 @@ function getDB() {
     static $db = null;
     
     if ($db === null) {
-        // ============================================
-        // OPÇÃO 1: Railway (Recomendado para produção)
-        // ============================================
-        // Configure as variáveis de ambiente no VPS:
-        // export MYSQL_HOST=containers-us-west-xxx.railway.app
-        // export MYSQL_PORT=3306
-        // export MYSQL_DATABASE=railway
-        // export MYSQL_USER=root
-        // export MYSQL_PASSWORD=sua_senha
-        // export MYSQL_SSL=true
+        // Suporte para variáveis de ambiente (Railway, VPS, Coolify, etc.)
+        // Prioridade: MYSQL_* (Railway) > DB_* (genérico) > padrão
         
-        // ============================================
-        // OPÇÃO 2: Hostinger (Tudo em um lugar)
-        // ============================================
-        $host = 'localhost';
-        $port = '3306';
-        $dbname = 'u123456789_jogo_bicho'; // Exemplo Hostinger
-        $username = 'u123456789_admin';
-        $password = 'sua_senha_segura';
+        // Railway usa MYSQL_* como prefixo
+        $host = getenv('MYSQL_HOST') ?: getenv('DB_HOST') ?: 'localhost';
+        $port = getenv('MYSQL_PORT') ?: getenv('DB_PORT') ?: '3306';
+        $dbname = getenv('MYSQL_DATABASE') ?: getenv('MYSQLDATABASE') ?: getenv('DB_NAME') ?: 'railway';
+        $username = getenv('MYSQL_USER') ?: getenv('MYSQLUSER') ?: getenv('DB_USER') ?: 'root';
+        $password = getenv('MYSQL_PASSWORD') ?: getenv('MYSQLPASSWORD') ?: getenv('MYSQL_ROOT_PASSWORD') ?: getenv('DB_PASSWORD') ?: '';
         
-        // ============================================
-        // OPÇÃO 3: VPS com MySQL local
-        // ============================================
-        // $host = 'localhost';
-        // $port = '3306';
-        // $dbname = 'jogo_do_bicho';
-        // $username = 'jogo_user';
-        // $password = 'senha_segura';
+        // Log para debug (remover em produção se necessário)
+        error_log("Tentando conectar: host=$host, port=$port, db=$dbname, user=$username");
         
         try {
             $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
@@ -47,16 +31,22 @@ function getDB() {
             $options = [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES => false
+                PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::ATTR_TIMEOUT => 5
             ];
             
-            // Habilitar SSL se necessário (Railway)
-            // $options[PDO::MYSQL_ATTR_SSL_CA] = '/etc/ssl/certs/ca-certificates.crt';
+            // Para Railway e outros serviços com SSL (se necessário)
+            if (getenv('DB_SSL') === 'true' || getenv('MYSQL_SSL') === 'true') {
+                $options[PDO::MYSQL_ATTR_SSL_CA] = '/etc/ssl/certs/ca-certificates.crt';
+                $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
+            }
             
             $db = new PDO($dsn, $username, $password, $options);
+            error_log("Conexão com banco estabelecida com sucesso");
         } catch (PDOException $e) {
             error_log("Erro de conexão: " . $e->getMessage());
-            throw new Exception("Erro ao conectar ao banco de dados");
+            error_log("DSN tentado: $dsn");
+            throw new Exception("Erro ao conectar ao banco de dados: " . $e->getMessage());
         }
     }
     
