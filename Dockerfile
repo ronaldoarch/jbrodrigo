@@ -30,11 +30,8 @@ RUN echo '<VirtualHost *:80>\n\
     CustomLog ${APACHE_LOG_DIR}/access.log combined\n\
 </VirtualHost>' > /etc/apache2/sites-available/000-default.conf
 
-# Copiar arquivos do backend diretamente para raiz
+# Copiar arquivos do backend diretamente para raiz (inclui .htaccess)
 COPY backend/ /var/www/html/
-
-# Garantir que .htaccess do backend seja copiado
-COPY backend/.htaccess /var/www/html/.htaccess
 
 # Copiar arquivos da API
 COPY api/ /var/www/html/api/
