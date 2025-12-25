@@ -1,0 +1,85 @@
+.admin-promotions {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.promotions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 24px;
+}
+
+.promotion-card {
+  background: var(--bg-card-hover);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.promotion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.promotion-header h3 {
+  font-size: 20px;
+  color: var(--primary-color);
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+}
+
+.promotion-description {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.promotion-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.detail-item span:first-child {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.detail-item span:last-child {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.promotion-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.promotion-actions .btn-view,
+.promotion-actions .btn-reject {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .promotions-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

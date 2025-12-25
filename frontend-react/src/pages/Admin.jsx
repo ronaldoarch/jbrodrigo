@@ -9,6 +9,9 @@ import AdminModalities from './admin/AdminModalities';
 import AdminSettings from './admin/AdminSettings';
 import AdminFacebookPixel from './admin/AdminFacebookPixel';
 import AdminWithdrawalLimits from './admin/AdminWithdrawalLimits';
+import AdminBets from './admin/AdminBets';
+import AdminPromotions from './admin/AdminPromotions';
+import AdminStories from './admin/AdminStories';
 import './Admin.css';
 
 const Admin = () => {
@@ -127,22 +130,10 @@ const Admin = () => {
           {activeSection === 'payments' && <AdminPayments />}
           {activeSection === 'users' && <AdminUsers />}
           {activeSection === 'odds' && <AdminOdds />}
-          {activeSection === 'bets' && (
-            <div className="admin-section">
-              <p>Apostas Admin - Em desenvolvimento</p>
-            </div>
-          )}
+          {activeSection === 'bets' && <AdminBets />}
           {activeSection === 'extractions' && <AdminExtractions />}
-          {activeSection === 'promotions' && (
-            <div className="admin-section">
-              <p>Promoções Admin - Em desenvolvimento</p>
-            </div>
-          )}
-          {activeSection === 'stories' && (
-            <div className="admin-section">
-              <p>Stories Admin - Em desenvolvimento</p>
-            </div>
-          )}
+          {activeSection === 'promotions' && <AdminPromotions />}
+          {activeSection === 'stories' && <AdminStories />}
           {activeSection === 'settings' && <AdminSettings />}
           {activeSection === 'modalities' && <AdminModalities />}
           {activeSection === 'facebook-pixel' && <AdminFacebookPixel />}
