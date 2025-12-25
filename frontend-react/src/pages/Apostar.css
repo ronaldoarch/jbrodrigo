@@ -1,0 +1,135 @@
+.apostar {
+  padding: 24px 0;
+}
+
+.apostar h1 {
+  font-size: 36px;
+  margin-bottom: 32px;
+  color: var(--primary-color);
+}
+
+.bet-form {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.form-section {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.form-section h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  color: var(--primary-color);
+}
+
+.form-section input[type='text'],
+.form-section input[type='number'],
+.form-section select {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.form-section input:focus,
+.form-section select:focus {
+  border-color: var(--primary-color);
+}
+
+.form-section small {
+  display: block;
+  color: #888;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.radio-group input[type='radio'] {
+  width: auto;
+  cursor: pointer;
+}
+
+.calculation-card {
+  background-color: var(--card-bg);
+  border: 2px solid var(--primary-color);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.calculation-card h3 {
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: var(--primary-color);
+}
+
+.calculation-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.calc-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.calc-row:last-child {
+  border-bottom: none;
+}
+
+.calc-row .highlight {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.calc-row .prize {
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--accent);
+}
+
+button.btn {
+  width: 100%;
+  font-size: 18px;
+  padding: 16px;
+}
+
+button.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .bet-form {
+    padding: 0 16px;
+  }
+  
+  .form-section {
+    padding: 16px;
+  }
+}
+

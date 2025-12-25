@@ -1,0 +1,209 @@
+.dashboard {
+  padding: 24px 0;
+}
+
+.dashboard h1 {
+  font-size: 36px;
+  margin-bottom: 8px;
+  color: var(--primary-color);
+}
+
+.welcome {
+  font-size: 18px;
+  color: #888;
+  margin-bottom: 32px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.dashboard-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.dashboard-card h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  color: var(--primary-color);
+}
+
+.balance-card .balance-amount {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 16px;
+}
+
+.balance-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+  color: #888;
+  font-size: 14px;
+}
+
+.quick-actions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.quick-action {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background-color: var(--background);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  color: var(--text);
+}
+
+.quick-action:hover {
+  background-color: var(--border);
+  transform: translateX(4px);
+}
+
+.quick-action .icon {
+  font-size: 24px;
+}
+
+.recent-bets {
+  margin-top: 32px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.section-header h2 {
+  font-size: 24px;
+  color: var(--primary-color);
+}
+
+.section-header .link {
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.empty-state p {
+  margin-bottom: 24px;
+  color: #888;
+  font-size: 18px;
+}
+
+.bets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bet-item {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.bet-item:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.bet-info h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: var(--primary-color);
+}
+
+.bet-date {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.bet-amount {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.bet-status {
+  text-align: right;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-pending {
+  background-color: #ffa500;
+  color: #000;
+}
+
+.status-settled_won {
+  background-color: var(--primary-color);
+  color: #000;
+}
+
+.status-settled_lost {
+  background-color: #ff4444;
+  color: #fff;
+}
+
+.status-settling {
+  background-color: #0080ff;
+  color: #fff;
+}
+
+.prize-amount {
+  margin-top: 8px;
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .bet-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .bet-status {
+    text-align: left;
+    width: 100%;
+  }
+}
+

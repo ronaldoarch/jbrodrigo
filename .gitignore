@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Build outputs
+frontend-react/dist/
+frontend-react/build/
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+error_log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# PHP
+composer.lock
+
+# Configurações sensíveis
+backend/scraper/config/database.php.local
+*.local.php
+backend/scraper/config/database.php
+# Manter apenas o exemplo
+!backend/scraper/config/database.example.php
+
+# Cache
+cache/
+tmp/
+

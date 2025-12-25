@@ -1,0 +1,140 @@
+.home {
+  padding: 24px 0;
+}
+
+.hero {
+  text-align: center;
+  padding: 48px 0;
+}
+
+.hero h1 {
+  font-size: 48px;
+  margin-bottom: 16px;
+  color: var(--primary-color);
+}
+
+.hero p {
+  font-size: 20px;
+  color: #888;
+  margin-bottom: 32px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.extractions-preview {
+  margin: 48px 0;
+}
+
+.extractions-preview h2 {
+  font-size: 32px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.extractions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.extraction-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.extraction-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 255, 136, 0.2);
+}
+
+.extraction-card h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: var(--primary-color);
+}
+
+.game-type {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.close-time {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--accent);
+}
+
+.quick-actions {
+  margin: 48px 0;
+}
+
+.quick-actions h2 {
+  font-size: 32px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.action-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: block;
+}
+
+.action-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 255, 136, 0.2);
+  border-color: var(--primary-color);
+}
+
+.action-card .icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.action-card h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: var(--primary-color);
+}
+
+.action-card p {
+  color: #888;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 32px;
+  }
+  
+  .hero-actions {
+    flex-direction: column;
+  }
+  
+  .extractions-grid,
+  .actions-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
