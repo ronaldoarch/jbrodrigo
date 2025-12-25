@@ -1,19 +1,25 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
 import Carousel from '../components/Carousel';
 import './Home.css';
 
 const Home = () => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
   const [extractions, setExtractions] = useState([]);
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Redirecionar para dashboard se autenticado
+    if (!authLoading && user) {
+      navigate('/dashboard');
+      return;
+    }
     loadData();
-  }, []);
+  }, [user, authLoading, navigate]);
 
   const loadData = async () => {
     try {
@@ -35,12 +41,17 @@ const Home = () => {
     }
   };
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="loading">
         <div className="spinner"></div>
       </div>
     );
+  }
+
+  // Não mostrar conteúdo se usuário está autenticado (será redirecionado)
+  if (user) {
+    return null;
   }
 
   return (
@@ -50,17 +61,15 @@ const Home = () => {
 
         <section className="hero">
           <h1>Bem-vindo ao Jogo do Bicho</h1>
-          <p>Aposte e ganhe com os melhores resultados!</p>
-          {!user && (
-            <div className="hero-actions">
-              <Link to="/login" className="btn btn-primary">
-                Criar Conta
-              </Link>
-              <Link to="/resultados" className="btn btn-secondary">
-                Ver Resultados
-              </Link>
-            </div>
-          )}
+          <p>A melhor plataforma para suas apostas</p>
+          <div className="hero-actions">
+            <Link to="/login" className="btn btn-primary">
+              Entrar
+            </Link>
+            <Link to="/login" className="btn btn-secondary">
+              Cadastrar
+            </Link>
+          </div>
         </section>
 
         <section className="extractions-preview">
@@ -76,46 +85,17 @@ const Home = () => {
                   <p className="close-time">
                     Fecha às {extraction.close_time}
                   </p>
-                  {user && (
-                    <Link
-                      to={`/apostar?extraction=${extraction.id}`}
-                      className="btn btn-primary"
-                    >
-                      Apostar
-                    </Link>
-                  )}
+                  <Link
+                    to={`/apostar?extraction=${extraction.id}`}
+                    className="btn btn-primary"
+                  >
+                    Apostar
+                  </Link>
                 </div>
               ))}
           </div>
         </section>
 
-        {user && (
-          <section className="quick-actions">
-            <h2>Ações Rápidas</h2>
-            <div className="actions-grid">
-              <Link to="/apostar" className="action-card">
-                <span className="icon">🎲</span>
-                <h3>Apostar Agora</h3>
-                <p>Faça sua aposta instantânea</p>
-              </Link>
-              <Link to="/carteira" className="action-card">
-                <span className="icon">💰</span>
-                <h3>Minha Carteira</h3>
-                <p>Deposite e saque</p>
-              </Link>
-              <Link to="/minhas-apostas" className="action-card">
-                <span className="icon">📋</span>
-                <h3>Minhas Apostas</h3>
-                <p>Veja suas apostas</p>
-              </Link>
-              <Link to="/resultados" className="action-card">
-                <span className="icon">📊</span>
-                <h3>Resultados</h3>
-                <p>Veja os últimos resultados</p>
-              </Link>
-            </div>
-          </section>
-        )}
       </div>
     </div>
   );
