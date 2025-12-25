@@ -33,7 +33,7 @@ RUN echo '<VirtualHost *:80>\n\
 # Copiar arquivos do backend
 COPY backend/ /var/www/html/
 
-# Copiar arquivos da API (que estão na raiz)
+# Copiar arquivos da API
 COPY api/ /var/www/html/api/
 
 # Configurar permissões

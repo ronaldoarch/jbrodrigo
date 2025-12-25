@@ -18,7 +18,7 @@ tmp/
 *.swo
 *~
 public_html/
-api/
 database.sql
 coolify-docker-compose.yml
+# NÃO ignorar api/ - ela precisa ser copiada
 
