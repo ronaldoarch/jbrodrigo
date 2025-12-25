@@ -18,19 +18,19 @@ echo json_encode([
             '/api/banners.php' => 'Banners promocionais',
         ],
         'auth' => [
-            '/backend/auth/register.php' => 'Registro de usuário',
-            '/backend/auth/login.php' => 'Login',
-            '/backend/auth/me.php' => 'Dados do usuário',
-            '/backend/auth/logout.php' => 'Logout',
+            '/backend/auth/register.php' => 'Registro de usuário (POST)',
+            '/backend/auth/login.php' => 'Login (POST)',
+            '/backend/auth/me.php' => 'Dados do usuário (GET)',
+            '/backend/auth/logout.php' => 'Logout (POST)',
         ],
         'bets' => [
-            '/backend/bets/create-bet-v2.php' => 'Criar aposta',
-            '/backend/bets/list.php' => 'Listar apostas',
-            '/backend/bets/calculate.php' => 'Calcular prêmios',
+            '/backend/bets/create-bet-v2.php' => 'Criar aposta (POST)',
+            '/backend/bets/list.php' => 'Listar apostas (GET)',
+            '/backend/bets/calculate.php' => 'Calcular prêmios (POST)',
         ],
         'wallet' => [
-            '/backend/wallet/balance.php' => 'Saldo da carteira',
-            '/backend/wallet/transactions.php' => 'Transações',
+            '/backend/wallet/balance.php' => 'Saldo da carteira (GET)',
+            '/backend/wallet/transactions.php' => 'Transações (GET)',
         ],
     ],
     'cors' => [
