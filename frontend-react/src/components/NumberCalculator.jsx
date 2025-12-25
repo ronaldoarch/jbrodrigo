@@ -6,8 +6,10 @@ const NumberCalculator = ({ modality, selectedNumbers = [], onSelect }) => {
   const [numbers, setNumbers] = useState(selectedNumbers);
 
   useEffect(() => {
-    onSelect(numbers);
-  }, [numbers, onSelect]);
+    if (numbers.length > 0 || selectedNumbers.length > 0) {
+      onSelect(numbers);
+    }
+  }, [numbers]);
 
   const getRequiredDigits = () => {
     if (modality.includes('milhar')) return 4;

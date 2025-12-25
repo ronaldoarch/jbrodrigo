@@ -177,10 +177,12 @@ const Apostar = () => {
       }
       setCurrentStep(4);
     } else if (currentStep === 4) {
-      // Validar etapa 4: Sorteios
-      if (betType === 'normal' && selectedExtractions.length === 0) {
-        setError('Selecione pelo menos um sorteio');
-        return;
+      // Validar etapa 4: Sorteios (apenas para apostas normais)
+      if (betType === 'normal') {
+        if (selectedExtractions.length === 0) {
+          setError('Selecione pelo menos um sorteio');
+          return;
+        }
       }
       setCurrentStep(5);
     }
@@ -646,60 +648,86 @@ const Apostar = () => {
             </div>
           )}
 
-          {/* ETAPA 4: Selecionar Sorteios */}
-          {currentStep === 4 && betType === 'normal' && (
+          {/* ETAPA 4: Selecionar Sorteios (apenas para apostas normais) */}
+          {currentStep === 4 && (
             <div className="step-content">
-              <h2>Selecione os Sorteios</h2>
-              
-              {selectedExtractions.length === 0 && (
-                <div className="warning-box">
-                  Nenhum sorteio selecionado
-                </div>
+              {betType === 'normal' ? (
+                <>
+                  <h2>Selecione os Sorteios</h2>
+                  
+                  {selectedExtractions.length === 0 && (
+                    <div className="warning-box">
+                      Nenhum sorteio selecionado
+                    </div>
+                  )}
+
+                  <div className="extractions-list">
+                    {extractions
+                      .filter((e) => e.type === 'normal' && e.is_active)
+                      .map((extraction) => (
+                        <label key={extraction.id} className="extraction-item">
+                          <input
+                            type="checkbox"
+                            checked={selectedExtractions.some((e) => e.id === extraction.id)}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setSelectedExtractions([...selectedExtractions, extraction]);
+                              } else {
+                                setSelectedExtractions(
+                                  selectedExtractions.filter((ex) => ex.id !== extraction.id)
+                                );
+                              }
+                            }}
+                          />
+                          <div className="extraction-info">
+                            <span className="extraction-name">{extraction.description}</span>
+                            <span className="extraction-time">Fecha às {extraction.close_time}</span>
+                          </div>
+                        </label>
+                      ))}
+                  </div>
+
+                  <div className="step-actions">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={handleBack}
+                    >
+                      ← Voltar
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={handleNext}
+                      disabled={selectedExtractions.length === 0}
+                    >
+                      Continuar →
+                    </button>
+                  </div>
+                </>
+              ) : (
+                // Para apostas instantâneas, pular direto para confirmação
+                <>
+                  <h2>Aposta Instantânea</h2>
+                  <p>Esta é uma aposta instantânea. Clique em continuar para confirmar.</p>
+                  <div className="step-actions">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={handleBack}
+                    >
+                      ← Voltar
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={handleNext}
+                    >
+                      Continuar →
+                    </button>
+                  </div>
+                </>
               )}
-
-              <div className="extractions-list">
-                {extractions
-                  .filter((e) => e.type === 'normal' && e.is_active)
-                  .map((extraction) => (
-                    <label key={extraction.id} className="extraction-item">
-                      <input
-                        type="checkbox"
-                        checked={selectedExtractions.some((e) => e.id === extraction.id)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setSelectedExtractions([...selectedExtractions, extraction]);
-                          } else {
-                            setSelectedExtractions(
-                              selectedExtractions.filter((ex) => ex.id !== extraction.id)
-                            );
-                          }
-                        }}
-                      />
-                      <div className="extraction-info">
-                        <span className="extraction-name">{extraction.description}</span>
-                        <span className="extraction-time">Fecha às {extraction.close_time}</span>
-                      </div>
-                    </label>
-                  ))}
-              </div>
-
-              <div className="step-actions">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={handleBack}
-                >
-                  ← Voltar
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={handleNext}
-                  disabled={selectedExtractions.length === 0}
-                >
-                  Continuar →
-                </button>
-              </div>
             </div>
           )}
 
