@@ -30,11 +30,14 @@ RUN echo '<VirtualHost *:80>\n\
     CustomLog ${APACHE_LOG_DIR}/access.log combined\n\
 </VirtualHost>' > /etc/apache2/sites-available/000-default.conf
 
-# Copiar arquivos do backend
-COPY backend/ /var/www/html/
+# Copiar arquivos do backend (mantendo estrutura)
+COPY backend/ /var/www/html/backend/
 
 # Copiar arquivos da API
 COPY api/ /var/www/html/api/
+
+# Criar symlink ou copiar arquivos necessários na raiz (se necessário)
+RUN ln -sf /var/www/html/backend/scraper /var/www/html/scraper || true
 
 # Configurar permissões
 RUN chown -R www-data:www-data /var/www/html \
