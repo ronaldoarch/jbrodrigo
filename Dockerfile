@@ -15,8 +15,8 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Habilitar mod_rewrite
-RUN a2enmod rewrite
+# Habilitar mod_rewrite e mod_headers (necessário para CORS)
+RUN a2enmod rewrite headers
 
 # Configurar Apache
 RUN echo '<VirtualHost *:80>\n\
