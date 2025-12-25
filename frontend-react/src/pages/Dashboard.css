@@ -6,12 +6,77 @@
   font-size: 36px;
   margin-bottom: 8px;
   color: var(--primary-color);
+  font-weight: 700;
 }
 
 .welcome {
   font-size: 18px;
-  color: #888;
+  color: var(--text-secondary);
   margin-bottom: 32px;
+}
+
+/* Stories Section */
+.stories-section {
+  margin-bottom: 40px;
+  padding: 24px 0;
+}
+
+.stories-container {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 20px 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) var(--bg-dark);
+}
+
+.stories-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.stories-container::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 3px;
+}
+
+.story-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 100px;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.story-item:hover {
+  transform: scale(1.1);
+}
+
+.story-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid var(--primary-color);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  box-shadow: 0 4px 15px rgba(234, 170, 1, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.story-item:hover .story-circle {
+  box-shadow: 0 6px 20px rgba(234, 170, 1, 0.5);
+  transform: scale(1.1);
+}
+
+.story-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+  font-weight: 500;
 }
 
 .dashboard-grid {
@@ -22,16 +87,26 @@
 }
 
 .dashboard-card {
-  background-color: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
   padding: 24px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.dashboard-card:hover {
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  transform: translateY(-4px);
+  background: var(--bg-card-hover);
 }
 
 .dashboard-card h2 {
   font-size: 20px;
   margin-bottom: 16px;
   color: var(--primary-color);
+  font-weight: 600;
 }
 
 .balance-card .balance-amount {
@@ -39,6 +114,7 @@
   font-weight: 700;
   color: var(--primary-color);
   margin-bottom: 16px;
+  text-shadow: 0 2px 10px rgba(234, 170, 1, 0.3);
 }
 
 .balance-details {
@@ -46,7 +122,7 @@
   flex-direction: column;
   gap: 8px;
   margin-bottom: 24px;
-  color: #888;
+  color: var(--text-muted);
   font-size: 14px;
 }
 
@@ -61,15 +137,18 @@
   align-items: center;
   gap: 12px;
   padding: 12px;
-  background-color: var(--background);
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  color: var(--text);
+  background: var(--bg-card-hover);
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--text-primary);
+  text-decoration: none;
+  border: 1px solid transparent;
 }
 
 .quick-action:hover {
-  background-color: var(--border);
+  border-color: var(--primary-color);
   transform: translateX(4px);
+  box-shadow: var(--shadow-md);
 }
 
 .quick-action .icon {
@@ -90,24 +169,32 @@
 .section-header h2 {
   font-size: 24px;
   color: var(--primary-color);
+  font-weight: 700;
 }
 
 .section-header .link {
   color: var(--primary-color);
-  font-weight: 500;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.section-header .link:hover {
+  color: var(--primary-light);
+  text-decoration: underline;
 }
 
 .empty-state {
   text-align: center;
   padding: 48px;
-  background-color: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  animation: fadeIn 0.5s ease-out;
 }
 
 .empty-state p {
   margin-bottom: 24px;
-  color: #888;
+  color: var(--text-muted);
   font-size: 18px;
 }
 
@@ -118,36 +205,40 @@
 }
 
 .bet-item {
-  background-color: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
   padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeIn 0.5s ease-out;
 }
 
 .bet-item:hover {
   border-color: var(--primary-color);
   transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  background: var(--bg-card-hover);
 }
 
 .bet-info h3 {
   font-size: 20px;
   margin-bottom: 8px;
   color: var(--primary-color);
+  font-weight: 600;
 }
 
 .bet-date {
-  color: #888;
+  color: var(--text-muted);
   font-size: 14px;
   margin-bottom: 4px;
 }
 
 .bet-amount {
-  color: var(--text);
-  font-weight: 500;
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 .bet-status {
@@ -161,49 +252,97 @@
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .status-pending {
-  background-color: #ffa500;
-  color: #000;
+  background: rgba(255, 165, 0, 0.2);
+  color: #ffa500;
+  border: 1px solid #ffa500;
 }
 
 .status-settled_won {
-  background-color: var(--primary-color);
-  color: #000;
+  background: rgba(234, 170, 1, 0.2);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
 }
 
 .status-settled_lost {
-  background-color: #ff4444;
-  color: #fff;
+  background: rgba(255, 68, 68, 0.2);
+  color: var(--error);
+  border: 1px solid var(--error);
 }
 
 .status-settling {
-  background-color: #0080ff;
-  color: #fff;
+  background: rgba(0, 128, 255, 0.2);
+  color: #0080ff;
+  border: 1px solid #0080ff;
 }
 
 .prize-amount {
   margin-top: 8px;
   color: var(--primary-color);
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 700;
+  font-size: 18px;
+  text-shadow: 0 2px 8px rgba(234, 170, 1, 0.3);
 }
 
 @media (max-width: 768px) {
+  .dashboard h1 {
+    font-size: 28px;
+  }
+
   .dashboard-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
-  
+
+  .dashboard-card {
+    padding: 20px;
+  }
+
+  .balance-card .balance-amount {
+    font-size: 36px;
+  }
+
   .bet-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
   }
-  
+
   .bet-status {
     text-align: left;
     width: 100%;
   }
+
+  .stories-container {
+    gap: 16px;
+  }
+
+  .story-circle {
+    width: 70px;
+    height: 70px;
+    font-size: 28px;
+  }
 }
 
+@media (max-width: 480px) {
+  .dashboard h1 {
+    font-size: 24px;
+  }
+
+  .dashboard-card {
+    padding: 16px;
+  }
+
+  .balance-card .balance-amount {
+    font-size: 32px;
+  }
+
+  .story-circle {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+  }
+}

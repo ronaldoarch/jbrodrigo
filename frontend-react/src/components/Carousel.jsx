@@ -15,7 +15,13 @@ const Carousel = ({ banners }) => {
   }, [banners.length]);
 
   if (!banners || banners.length === 0) {
-    return null;
+    return (
+      <div className="carousel">
+        <div className="carousel-placeholder">
+          Banner em breve
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -27,7 +33,10 @@ const Carousel = ({ banners }) => {
         }}
       >
         {banners.map((banner, index) => (
-          <div key={banner.id} className="carousel-slide">
+          <div
+            key={banner.id}
+            className={`carousel-slide ${index === currentIndex ? 'active' : ''}`}
+          >
             {banner.link_url ? (
               <a href={banner.link_url} target="_blank" rel="noopener noreferrer">
                 <img src={banner.image_url} alt={banner.title} />

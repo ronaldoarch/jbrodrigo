@@ -6,6 +6,7 @@
   font-size: 36px;
   margin-bottom: 32px;
   color: var(--primary-color);
+  font-weight: 700;
 }
 
 .filters {
@@ -13,13 +14,20 @@
 }
 
 .filters select {
-  padding: 12px;
-  background-color: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text);
+  padding: 14px 18px;
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  color: var(--text-primary);
   font-size: 16px;
   cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filters select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(234, 170, 1, 0.2);
+  outline: none;
 }
 
 .bets-list {
@@ -29,10 +37,19 @@
 }
 
 .bet-card {
-  background-color: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
   padding: 24px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.bet-card:hover {
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  background: var(--bg-card-hover);
 }
 
 .bet-header {
@@ -41,17 +58,18 @@
   align-items: flex-start;
   margin-bottom: 16px;
   padding-bottom: 16px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .bet-header h3 {
   font-size: 24px;
   color: var(--primary-color);
   margin-bottom: 4px;
+  font-weight: 600;
 }
 
 .bet-date {
-  color: #888;
+  color: var(--text-muted);
   font-size: 14px;
 }
 
@@ -66,29 +84,36 @@
   display: flex;
   justify-content: space-between;
   padding: 8px 0;
+  color: var(--text-primary);
+}
+
+.detail-row .label {
+  color: var(--text-secondary);
 }
 
 .detail-row .value {
   font-weight: 600;
-  color: var(--text);
+  color: var(--text-primary);
 }
 
 .detail-row .prize {
   font-weight: 700;
-  color: var(--accent);
+  color: var(--primary-color);
   font-size: 18px;
+  text-shadow: 0 2px 8px rgba(234, 170, 1, 0.3);
 }
 
 .bet-items {
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--border-color);
 }
 
 .bet-items h4 {
   font-size: 16px;
   margin-bottom: 12px;
   color: var(--primary-color);
+  font-weight: 600;
 }
 
 .bet-item {
@@ -97,15 +122,17 @@
   align-items: center;
   padding: 8px 0;
   font-size: 14px;
+  color: var(--text-primary);
 }
 
 .won-badge {
-  background-color: var(--primary-color);
-  color: var(--background);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  color: var(--bg-dark);
   padding: 4px 8px;
-  border-radius: 4px;
+  border-radius: 6px;
   font-weight: 600;
   font-size: 12px;
+  box-shadow: 0 2px 8px rgba(234, 170, 1, 0.3);
 }
 
 .pagination {
@@ -114,6 +141,23 @@
   align-items: center;
   gap: 16px;
   margin-top: 32px;
+}
+
+.pagination button {
+  padding: 10px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pagination button:hover:not(:disabled) {
+  border-color: var(--primary-color);
+  background: var(--bg-card-hover);
+  transform: translateY(-2px);
 }
 
 .pagination button:disabled {
@@ -126,11 +170,10 @@
     flex-direction: column;
     gap: 12px;
   }
-  
+
   .bet-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
   }
 }
-

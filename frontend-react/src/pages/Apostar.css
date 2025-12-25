@@ -6,49 +6,207 @@
   font-size: 36px;
   margin-bottom: 32px;
   color: var(--primary-color);
+  font-weight: 700;
 }
 
-.bet-form {
-  max-width: 800px;
-  margin: 0 auto;
+/* Barra de Progresso */
+.progress-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+  padding: 0 20px;
 }
 
-.form-section {
-  background-color: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 24px;
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+  max-width: 200px;
 }
 
-.form-section h2 {
-  font-size: 20px;
-  margin-bottom: 16px;
-  color: var(--primary-color);
+.progress-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 3px solid var(--border-color);
+  background: var(--bg-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--text-secondary);
+  position: relative;
+  z-index: 2;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.form-section input[type='text'],
-.form-section input[type='number'],
-.form-section select {
-  width: 100%;
-  padding: 12px;
-  background-color: var(--background);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text);
-  font-size: 16px;
-  margin-bottom: 8px;
+.progress-step.active .progress-circle {
+  background: var(--primary-color);
+  color: var(--bg-dark);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 20px rgba(234, 170, 1, 0.5);
+  transform: scale(1.1);
 }
 
-.form-section input:focus,
-.form-section select:focus {
+.progress-step.completed .progress-circle {
+  background: var(--primary-color);
+  color: var(--bg-dark);
   border-color: var(--primary-color);
 }
 
-.form-section small {
+.progress-label {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-align: center;
+}
+
+.progress-step.active .progress-label {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.progress-line {
+  position: absolute;
+  top: 25px;
+  left: calc(50% + 25px);
+  width: calc(100% - 50px);
+  height: 4px;
+  background: var(--border-color);
+  z-index: 1;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-step.completed .progress-line,
+.progress-step.active .progress-line {
+  background: var(--primary-color);
+  box-shadow: 0 0 10px rgba(234, 170, 1, 0.3);
+}
+
+.progress-step:last-child .progress-line {
+  display: none;
+}
+
+/* Card Branco Central */
+.bet-form-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  min-height: 500px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.bet-form-container h2 {
+  color: var(--bg-dark);
+  font-size: 28px;
+  margin-bottom: 32px;
+  font-weight: 700;
+}
+
+.form-section {
+  margin-bottom: 32px;
+}
+
+.form-section h3 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  color: var(--bg-dark);
+  font-weight: 600;
+}
+
+/* Modalidades Grid */
+.modalities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.modality-card {
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--text-primary);
+}
+
+.modality-card:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  background: var(--bg-card-hover);
+}
+
+.modality-card.selected {
+  border-color: var(--primary-color);
+  background: rgba(234, 170, 1, 0.15);
+  box-shadow: 0 0 20px rgba(234, 170, 1, 0.3);
+}
+
+.modality-card h4 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.modality-card p {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Formulário */
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
   display: block;
-  color: #888;
+  margin-bottom: 8px;
+  color: var(--bg-dark);
+  font-weight: 600;
   font-size: 14px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 14px 18px;
+  background: #f5f5f5;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  color: var(--bg-dark);
+  font-size: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(234, 170, 1, 0.2);
+  background: white;
+  outline: none;
+}
+
+.form-group input::placeholder {
+  color: #999;
+}
+
+.form-group small {
+  display: block;
+  color: #666;
+  font-size: 12px;
   margin-top: 4px;
 }
 
@@ -63,6 +221,7 @@
   align-items: center;
   gap: 8px;
   cursor: pointer;
+  color: var(--bg-dark);
 }
 
 .radio-group input[type='radio'] {
@@ -70,18 +229,21 @@
   cursor: pointer;
 }
 
+/* Preview de Cálculo */
 .calculation-card {
-  background-color: var(--card-bg);
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-card-hover) 100%);
   border: 2px solid var(--primary-color);
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 24px;
   margin-bottom: 24px;
+  box-shadow: var(--shadow-md);
 }
 
 .calculation-card h3 {
   font-size: 24px;
   margin-bottom: 16px;
   color: var(--primary-color);
+  font-weight: 700;
 }
 
 .calculation-details {
@@ -93,43 +255,110 @@
 .calc-row {
   display: flex;
   justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
 }
 
 .calc-row:last-child {
   border-bottom: none;
+  font-size: 20px;
+  font-weight: 700;
+  padding-top: 16px;
 }
 
 .calc-row .highlight {
   font-weight: 600;
-  color: var(--primary-color);
+  color: var(--text-secondary);
 }
 
 .calc-row .prize {
   font-weight: 700;
-  font-size: 20px;
-  color: var(--accent);
+  font-size: 24px;
+  color: var(--primary-color);
+  text-shadow: 0 2px 8px rgba(234, 170, 1, 0.3);
 }
 
 button.btn {
   width: 100%;
   font-size: 18px;
   padding: 16px;
+  margin-top: 8px;
 }
 
 button.btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
+}
+
+.error {
+  background: rgba(255, 68, 68, 0.15);
+  border: 1px solid var(--error);
+  color: var(--error);
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 24px;
 }
 
 @media (max-width: 768px) {
-  .bet-form {
-    padding: 0 16px;
+  .bet-form-container {
+    padding: 24px;
+    border-radius: 12px;
   }
-  
-  .form-section {
+
+  .bet-form-container h2 {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+
+  .modalities-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .modality-card {
     padding: 16px;
+  }
+
+  .modality-card h4 {
+    font-size: 16px;
+  }
+
+  .progress-bar {
+    padding: 0 12px;
+  }
+
+  .progress-circle {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+
+  .progress-line {
+    top: 20px;
+    left: calc(50% + 20px);
+    width: calc(100% - 40px);
   }
 }
 
+@media (max-width: 480px) {
+  .bet-form-container {
+    padding: 20px;
+    min-height: auto;
+  }
+
+  .modalities-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .progress-circle {
+    width: 36px;
+    height: 36px;
+    font-size: 12px;
+  }
+
+  .progress-label {
+    font-size: 10px;
+  }
+}
