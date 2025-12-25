@@ -77,9 +77,9 @@ const Inicio = () => {
   };
 
   // Modalidades destacadas para a seção de cotações (baseado na imagem)
-  // Nota: "Quina de Grupo" não existe no backend, usando "Quadra de Grupo" como alternativa
+  // Nota: "Quina de Grupo" (5) não existe no backend, usando "Terno de Grupo" como alternativa
   const featuredModalities = [
-    { key: 'quadra-grupo', name: 'Quadra de Grupo', number: 4, defaultMultiplier: 1000 },
+    { key: 'terno-grupo', name: 'Terno de Grupo', number: 5, defaultMultiplier: 150 }, // Substituindo Quina
     { key: 'milhar-centena', name: 'Milhar/Centena', number: 9, defaultMultiplier: 3300 },
     { key: 'milhar-invertida', name: 'Milhar Invertida', number: 12, defaultMultiplier: 6000 },
     { key: 'milhar', name: 'Milhar', number: 8, defaultMultiplier: 6000 },
@@ -98,11 +98,9 @@ const Inicio = () => {
   return (
     <div className="inicio">
       {/* Carrossel de Banners */}
-      {banners.length > 0 && (
-        <div className="hero-section">
-          <Carousel banners={banners} />
-        </div>
-      )}
+      <div className="hero-section">
+        <Carousel banners={banners} />
+      </div>
 
       <div className="container">
         {/* Seção de Boas-vindas */}
