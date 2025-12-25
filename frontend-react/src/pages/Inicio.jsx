@@ -76,14 +76,15 @@ const Inicio = () => {
     }
   };
 
-  // Modalidades destacadas para a seção de cotações
+  // Modalidades destacadas para a seção de cotações (baseado na imagem)
+  // Nota: "Quina de Grupo" não existe no backend, usando "Quadra de Grupo" como alternativa
   const featuredModalities = [
-    { key: 'quina-grupo', name: 'Quina de Grupo', number: 5 },
-    { key: 'milhar-centena', name: 'Milhar/Centena', number: 9 },
-    { key: 'milhar-invertida', name: 'Milhar Invertida', number: 12 },
-    { key: 'milhar', name: 'Milhar', number: 8 },
-    { key: 'terno-dezena', name: 'Terno de Dezena', number: 14 },
-    { key: 'quadra-grupo', name: 'Quadra de Grupo', number: 4 },
+    { key: 'quadra-grupo', name: 'Quadra de Grupo', number: 4, defaultMultiplier: 1000 },
+    { key: 'milhar-centena', name: 'Milhar/Centena', number: 9, defaultMultiplier: 3300 },
+    { key: 'milhar-invertida', name: 'Milhar Invertida', number: 12, defaultMultiplier: 6000 },
+    { key: 'milhar', name: 'Milhar', number: 8, defaultMultiplier: 6000 },
+    { key: 'terno-dezena', name: 'Terno de Dezena', number: 14, defaultMultiplier: 3500 },
+    { key: 'quadra-grupo', name: 'Quadra de Grupo', number: 4, defaultMultiplier: 1000 },
   ];
 
   if (loading) {
@@ -114,14 +115,17 @@ const Inicio = () => {
         <section className="live-odds-section">
           <h2 className="section-title">COTAÇÃO AO VIVO</h2>
           <div className="odds-grid">
-            {featuredModalities.map((mod) => {
-              const odd = odds[mod.key] || { multiplier: 0, name: mod.name };
+            {featuredModalities.map((mod, index) => {
+              const odd = odds[mod.key] || { multiplier: mod.defaultMultiplier || 0, name: mod.name };
+              // Usar índice único para evitar duplicatas
+              const uniqueKey = `${mod.key}-${index}`;
+              const multiplier = odd.multiplier || mod.defaultMultiplier || 0;
               return (
-                <div key={mod.key} className="odds-card">
+                <div key={uniqueKey} className="odds-card">
                   <div className="odds-number">{mod.number}.</div>
                   <h3 className="odds-name">{odd.name || mod.name}</h3>
                   <div className="odds-value">
-                    1x R$ {odd.multiplier?.toFixed(2).replace('.', ',') || '0,00'}
+                    1x R$ {multiplier.toFixed(2).replace('.', ',')}
                   </div>
                   <button
                     className="btn-play"
