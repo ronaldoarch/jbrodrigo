@@ -1,0 +1,20 @@
+# Configuração de CORS via Apache (raiz)
+<IfModule mod_headers.c>
+    # Permitir origens específicas
+    SetEnvIf Origin "^https?://(tradicaodobicho\.site|www\.tradicaodobicho\.site|dsssg0wkk4cwcgcckkwsco0w\.agenciamidas\.com|localhost(:[0-9]+)?)$" AccessControlAllowOrigin=$0
+    Header always set Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
+    
+    # Headers CORS básicos
+    Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+    Header always set Access-Control-Allow-Credentials "true"
+    Header always set Access-Control-Max-Age "86400"
+</IfModule>
+
+# Responder requisições OPTIONS diretamente
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule ^(.*)$ $1 [R=200,L]
+</IfModule>
+

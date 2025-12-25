@@ -30,11 +30,14 @@ RUN echo '<VirtualHost *:80>\n\
     CustomLog ${APACHE_LOG_DIR}/access.log combined\n\
 </VirtualHost>' > /etc/apache2/sites-available/000-default.conf
 
-# Copiar arquivos do backend diretamente para raiz (inclui .htaccess)
-COPY backend/ /var/www/html/
+# Copiar arquivos do backend mantendo estrutura /backend/
+COPY backend/ /var/www/html/backend/
 
 # Copiar arquivos da API
 COPY api/ /var/www/html/api/
+
+# Copiar .htaccess da raiz para aplicar CORS globalmente
+COPY .htaccess /var/www/html/.htaccess
 
 # Criar database.php a partir do exemplo (se não existir)
 # Garantir que o diretório existe
