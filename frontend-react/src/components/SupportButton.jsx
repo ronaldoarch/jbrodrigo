@@ -6,7 +6,7 @@ const SupportButton = () => {
   const [whatsappNumber, setWhatsappNumber] = useState('');
 
   useEffect(() => {
-    loadWhatsAppNumber();
+    loadWhatsappNumber();
   }, []);
 
   const loadWhatsappNumber = async () => {

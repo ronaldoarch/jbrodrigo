@@ -22,7 +22,10 @@ const FacebookPixel = () => {
         initializePixel(response.data.pixel_id);
       }
     } catch (error) {
-      console.debug('Erro ao carregar configuração do Facebook Pixel:', error);
+      // Silenciar erro se endpoint não existir (404) ou não for admin (401)
+      if (error.response?.status !== 404 && error.response?.status !== 401) {
+        console.debug('Erro ao carregar configuração do Facebook Pixel:', error);
+      }
     }
   };
 
