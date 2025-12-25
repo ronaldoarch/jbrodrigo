@@ -36,9 +36,10 @@ COPY backend/ /var/www/html/
 # Copiar arquivos da API
 COPY api/ /var/www/html/api/
 
-# Verificar se arquivos foram copiados (debug)
-RUN ls -la /var/www/html/scraper/config/ || echo "Scraper não encontrado"
-RUN ls -la /var/www/html/ || echo "Listando raiz"
+# Criar database.php a partir do exemplo (se não existir)
+RUN if [ ! -f /var/www/html/scraper/config/database.php ]; then \
+    cp /var/www/html/scraper/config/database.example.php /var/www/html/scraper/config/database.php; \
+    fi
 
 # Configurar permissões
 RUN chown -R www-data:www-data /var/www/html \
