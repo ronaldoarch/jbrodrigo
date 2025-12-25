@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
+import AnimalSelector from '../components/AnimalSelector';
+import NumberCalculator from '../components/NumberCalculator';
 import './Apostar.css';
 
 const Apostar = () => {
@@ -12,18 +14,26 @@ const Apostar = () => {
   // Estados de controle
   const [currentStep, setCurrentStep] = useState(1);
   const [extractions, setExtractions] = useState([]);
-  const [selectedExtraction, setSelectedExtraction] = useState(null);
+  const [selectedExtractions, setSelectedExtractions] = useState([]);
   const [betType, setBetType] = useState('normal');
   const [modality, setModality] = useState('');
-  const [betValue, setBetValue] = useState('');
+  const [selectedAnimals, setSelectedAnimals] = useState([]);
+  const [selectedNumbers, setSelectedNumbers] = useState([]);
   const [positions, setPositions] = useState('1');
   const [value, setValue] = useState('');
   const [divisionType, setDivisionType] = useState('todos');
+  const [bonus, setBonus] = useState(0);
+  const [useBonus, setUseBonus] = useState(false);
   const [odds, setOdds] = useState({});
   const [calculation, setCalculation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  // Verificar se modalidade é de grupo
+  const isGroupModality = () => {
+    return modality.includes('grupo');
+  };
 
   useEffect(() => {
     loadData();
@@ -34,17 +44,17 @@ const Apostar = () => {
     if (extractionId && extractions.length > 0) {
       const ext = extractions.find((e) => e.id === parseInt(extractionId));
       if (ext) {
-        setSelectedExtraction(ext);
+        setSelectedExtractions([ext]);
         setBetType('normal');
       }
     }
   }, [searchParams, extractions]);
 
   useEffect(() => {
-    if (currentStep === 3) {
+    if (currentStep === 5) {
       calculateBet();
     }
-  }, [modality, betValue, positions, value, divisionType, currentStep]);
+  }, [modality, selectedAnimals, selectedNumbers, positions, value, divisionType, currentStep, selectedExtractions]);
 
   const loadData = async () => {
     try {
@@ -67,7 +77,20 @@ const Apostar = () => {
   };
 
   const calculateBet = async () => {
-    if (!modality || !betValue || !value) {
+    if (!modality) {
+      setCalculation(null);
+      return;
+    }
+
+    // Preparar betValue baseado na modalidade
+    let betValue = '';
+    if (isGroupModality()) {
+      betValue = selectedAnimals.join(',');
+    } else {
+      betValue = selectedNumbers.join(',');
+    }
+
+    if (!betValue || !value) {
       setCalculation(null);
       return;
     }
@@ -113,10 +136,8 @@ const Apostar = () => {
         })()
       : pos.split(',').map(Number);
 
-    if (mod === 'grupo') {
-      return val.split(',').length * positionsArray.length;
-    }
-    return val.split(',').length * positionsArray.length;
+    const valuesArray = val.split(',');
+    return valuesArray.length * positionsArray.length;
   };
 
   const handleNext = () => {
@@ -130,11 +151,22 @@ const Apostar = () => {
       }
       setCurrentStep(2);
     } else if (currentStep === 2) {
-      // Validar etapa 2: Seleção
-      if (!betValue) {
-        setError('Preencha o valor da aposta');
-        return;
+      // Validar etapa 2: Seleção (Animais ou Números)
+      if (isGroupModality()) {
+        const requiredCount = modality === 'grupo' ? 1 : modality === 'dupla-grupo' ? 2 : modality === 'terno-grupo' ? 3 : 4;
+        if (selectedAnimals.length !== requiredCount) {
+          setError(`Selecione exatamente ${requiredCount} grupo(s)`);
+          return;
+        }
+      } else {
+        if (selectedNumbers.length === 0) {
+          setError('Selecione pelo menos um número');
+          return;
+        }
       }
+      setCurrentStep(3);
+    } else if (currentStep === 3) {
+      // Validar etapa 3: Posição e Quantia
       if (!positions) {
         setError('Selecione as posições');
         return;
@@ -143,7 +175,14 @@ const Apostar = () => {
         setError('Informe um valor válido');
         return;
       }
-      setCurrentStep(3);
+      setCurrentStep(4);
+    } else if (currentStep === 4) {
+      // Validar etapa 4: Sorteios
+      if (betType === 'normal' && selectedExtractions.length === 0) {
+        setError('Selecione pelo menos um sorteio');
+        return;
+      }
+      setCurrentStep(5);
     }
   };
 
@@ -166,16 +205,19 @@ const Apostar = () => {
     }
 
     try {
+      // Preparar betValue
+      const betValue = isGroupModality() 
+        ? selectedAnimals.join(',')
+        : selectedNumbers.join(',');
+
       const betData = {
         bet_type: betType,
-        extraction_id:
-          betType === 'normal' && selectedExtraction
-            ? selectedExtraction.id
-            : null,
-        game_type:
-          betType === 'normal' && selectedExtraction
-            ? selectedExtraction.game_type
-            : 'INSTANTANEA',
+        extraction_ids: betType === 'normal' && selectedExtractions.length > 0
+          ? selectedExtractions.map((e) => e.id)
+          : [],
+        game_type: betType === 'normal' && selectedExtractions.length > 0
+          ? selectedExtractions[0].game_type
+          : 'INSTANTANEA',
         items: [
           {
             modality,
@@ -190,7 +232,6 @@ const Apostar = () => {
       const response = await api.post('/backend/bets/create-bet-v2.php', betData);
 
       if (response.data.success) {
-        // Salvar dados da aposta para página de confirmação
         sessionStorage.setItem('lastBet', JSON.stringify({
           ...response.data.bet,
           calculation,
@@ -252,20 +293,30 @@ const Apostar = () => {
       <div className="container">
         <h1>Fazer Aposta</h1>
 
-        {/* Barra de Progresso */}
+        {/* Barra de Progresso - 5 Etapas */}
         <div className="progress-bar">
           <div className={`progress-step ${currentStep >= 1 ? 'active' : ''} ${currentStep > 1 ? 'completed' : ''}`}>
-            <div className="progress-circle">1</div>
+            <div className="progress-circle">{currentStep > 1 ? '✓' : '1'}</div>
             <span className="progress-label">Modalidade</span>
             <div className="progress-line"></div>
           </div>
           <div className={`progress-step ${currentStep >= 2 ? 'active' : ''} ${currentStep > 2 ? 'completed' : ''}`}>
-            <div className="progress-circle">2</div>
-            <span className="progress-label">Seleção</span>
+            <div className="progress-circle">{currentStep > 2 ? '✓' : '2'}</div>
+            <span className="progress-label">{isGroupModality() ? 'Animais' : 'Números'}</span>
             <div className="progress-line"></div>
           </div>
-          <div className={`progress-step ${currentStep >= 3 ? 'active' : ''}`}>
-            <div className="progress-circle">3</div>
+          <div className={`progress-step ${currentStep >= 3 ? 'active' : ''} ${currentStep > 3 ? 'completed' : ''}`}>
+            <div className="progress-circle">{currentStep > 3 ? '✓' : '3'}</div>
+            <span className="progress-label">Configuração</span>
+            <div className="progress-line"></div>
+          </div>
+          <div className={`progress-step ${currentStep >= 4 ? 'active' : ''} ${currentStep > 4 ? 'completed' : ''}`}>
+            <div className="progress-circle">{currentStep > 4 ? '✓' : '4'}</div>
+            <span className="progress-label">Sorteios</span>
+            <div className="progress-line"></div>
+          </div>
+          <div className={`progress-step ${currentStep >= 5 ? 'active' : ''}`}>
+            <div className="progress-circle">5</div>
             <span className="progress-label">Confirmação</span>
           </div>
         </div>
@@ -279,31 +330,6 @@ const Apostar = () => {
             <div className="step-content">
               <h2>Selecione a Modalidade</h2>
               
-              {betType === 'normal' && (
-                <div className="form-section">
-                  <h3>Selecionar Extração</h3>
-                  <select
-                    value={selectedExtraction?.id || ''}
-                    onChange={(e) => {
-                      const ext = extractions.find(
-                        (ex) => ex.id === parseInt(e.target.value)
-                      );
-                      setSelectedExtraction(ext);
-                    }}
-                    className="input-field"
-                  >
-                    <option value="">Selecione uma extração</option>
-                    {extractions
-                      .filter((e) => e.type === 'normal' && e.active)
-                      .map((extraction) => (
-                        <option key={extraction.id} value={extraction.id}>
-                          {extraction.description} - Fecha às {extraction.close_time}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-              )}
-
               <div className="form-section">
                 <h3>Tipo de Aposta</h3>
                 <div className="radio-group">
@@ -339,7 +365,7 @@ const Apostar = () => {
                       onClick={() => setModality(mod.key)}
                     >
                       <h4>{mod.name}</h4>
-                      <p>R$ {mod.multiplier?.toFixed(2)}</p>
+                      <p>1x R$ {mod.multiplier?.toFixed(2)}</p>
                     </div>
                   ))}
                 </div>
@@ -356,7 +382,7 @@ const Apostar = () => {
                       onClick={() => setModality(mod.key)}
                     >
                       <h4>{mod.name}</h4>
-                      <p>R$ {mod.multiplier?.toFixed(2)}</p>
+                      <p>1x R$ {mod.multiplier?.toFixed(2)}</p>
                     </div>
                   ))}
                 </div>
@@ -373,7 +399,7 @@ const Apostar = () => {
                       onClick={() => setModality(mod.key)}
                     >
                       <h4>{mod.name}</h4>
-                      <p>R$ {mod.multiplier?.toFixed(2)}</p>
+                      <p>1x R$ {mod.multiplier?.toFixed(2)}</p>
                     </div>
                   ))}
                 </div>
@@ -390,7 +416,7 @@ const Apostar = () => {
                       onClick={() => setModality(mod.key)}
                     >
                       <h4>{mod.name}</h4>
-                      <p>R$ {mod.multiplier?.toFixed(2)}</p>
+                      <p>1x R$ {mod.multiplier?.toFixed(2)}</p>
                     </div>
                   ))}
                 </div>
@@ -407,7 +433,7 @@ const Apostar = () => {
                       onClick={() => setModality(mod.key)}
                     >
                       <h4>{mod.name}</h4>
-                      <p>R$ {mod.multiplier?.toFixed(2)}</p>
+                      <p>1x R$ {mod.multiplier?.toFixed(2)}</p>
                     </div>
                   ))}
                 </div>
@@ -420,67 +446,148 @@ const Apostar = () => {
                   onClick={handleNext}
                   disabled={!modality}
                 >
-                  Próximo →
+                  Continuar →
                 </button>
               </div>
             </div>
           )}
 
-          {/* ETAPA 2: Seleção */}
+          {/* ETAPA 2: Seleção (Animais ou Números) */}
           {currentStep === 2 && (
             <div className="step-content">
-              <h2>Preencha os Dados da Aposta</h2>
+              {isGroupModality() ? (
+                <AnimalSelector
+                  selectedAnimals={selectedAnimals}
+                  onSelect={setSelectedAnimals}
+                  modality={modality}
+                />
+              ) : (
+                <NumberCalculator
+                  modality={modality}
+                  selectedNumbers={selectedNumbers}
+                  onSelect={setSelectedNumbers}
+                />
+              )}
 
-              <div className="form-group">
-                <label>Número/Animal</label>
-                <input
-                  type="text"
-                  value={betValue}
-                  onChange={(e) => setBetValue(e.target.value)}
-                  placeholder={
-                    modality.includes('grupo')
-                      ? 'Ex: 1,2,3 (códigos dos animais)'
-                      : 'Ex: 1234 ou 1234,5678'
+              <div className="step-actions">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={handleBack}
+                >
+                  ← Voltar
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleNext}
+                  disabled={
+                    isGroupModality()
+                      ? (modality === 'grupo' && selectedAnimals.length !== 1) ||
+                        (modality === 'dupla-grupo' && selectedAnimals.length !== 2) ||
+                        (modality === 'terno-grupo' && selectedAnimals.length !== 3) ||
+                        (modality === 'quadra-grupo' && selectedAnimals.length !== 4)
+                      : selectedNumbers.length === 0
                   }
-                  className="input-field"
-                  required
-                />
-                <small>
-                  {modality.includes('grupo')
-                    ? 'Digite os códigos dos animais (1-25) separados por vírgula'
-                    : 'Digite os números separados por vírgula'}
-                </small>
+                >
+                  Continuar →
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* ETAPA 3: Configuração (Posição e Quantia) */}
+          {currentStep === 3 && (
+            <div className="step-content">
+              <h2>Configure sua Aposta</h2>
+
+              <div className="form-section">
+                <h3>Posição</h3>
+                <div className="radio-group">
+                  <label>
+                    <input
+                      type="radio"
+                      value="1"
+                      checked={positions === '1'}
+                      onChange={(e) => setPositions(e.target.value)}
+                    />
+                    <span>1º Prêmio</span>
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      value="1-3"
+                      checked={positions === '1-3'}
+                      onChange={(e) => setPositions(e.target.value)}
+                    />
+                    <span>1º ao 3º</span>
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      value="1-5"
+                      checked={positions === '1-5'}
+                      onChange={(e) => setPositions(e.target.value)}
+                    />
+                    <span>1º ao 5º</span>
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      value="custom"
+                      checked={positions === 'custom'}
+                      onChange={(e) => setPositions(e.target.value)}
+                    />
+                    <span>Personalizado</span>
+                  </label>
+                </div>
+                {positions === 'custom' && (
+                  <input
+                    type="text"
+                    placeholder="Ex: 1,3,5 ou 1-5"
+                    value={positions}
+                    onChange={(e) => setPositions(e.target.value)}
+                    className="input-field"
+                  />
+                )}
               </div>
 
-              <div className="form-group">
-                <label>Posições</label>
-                <input
-                  type="text"
-                  value={positions}
-                  onChange={(e) => setPositions(e.target.value)}
-                  placeholder="Ex: 1 ou 1,3,5 ou 1-5"
-                  className="input-field"
-                  required
-                />
-                <small>
-                  {modality.includes('milhar')
-                    ? 'Posições: 1-5 (Ex: 1, 1-3, 1-5)'
-                    : 'Posições: 1-7 (Ex: 1, 1-3, 1-7)'}
-                </small>
+              <div className="form-section">
+                <h3>Quantia</h3>
+                <div className="amount-controls">
+                  <button
+                    type="button"
+                    className="amount-btn"
+                    onClick={() => setValue(Math.max(0.1, parseFloat(value || 0) - 0.1).toFixed(2))}
+                  >
+                    −
+                  </button>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0.1"
+                    max="5000"
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                    className="amount-input"
+                    placeholder="R$ 0,00"
+                  />
+                  <button
+                    type="button"
+                    className="amount-btn"
+                    onClick={() => setValue((parseFloat(value || 0) + 0.1).toFixed(2))}
+                  >
+                    +
+                  </button>
+                </div>
+                <small>Mínimo: R$ 0,10 | Máximo: R$ 5.000,00</small>
               </div>
 
-              <div className="form-group">
-                <label>Valor</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  min="0.01"
-                  value={value}
-                  onChange={(e) => setValue(e.target.value)}
-                  placeholder="0.00"
-                  className="input-field"
-                  required
-                />
+              <div className="form-section">
+                <h3>Selecione a divisão</h3>
+                <p className="division-info">
+                  "Para todos os palpites" significa que o valor será dividido entre todos os palpites, enquanto "para cada palpite" significa que o valor será apostado para cada palpite.
+                </p>
                 <div className="radio-group">
                   <label>
                     <input
@@ -489,7 +596,7 @@ const Apostar = () => {
                       checked={divisionType === 'todos'}
                       onChange={(e) => setDivisionType(e.target.value)}
                     />
-                    <span>Dividir entre todas as unidades</span>
+                    <span>Para todos os palpites</span>
                   </label>
                   <label>
                     <input
@@ -498,9 +605,82 @@ const Apostar = () => {
                       checked={divisionType === 'cada'}
                       onChange={(e) => setDivisionType(e.target.value)}
                     />
-                    <span>Valor por unidade</span>
+                    <span>Para cada palpite</span>
                   </label>
                 </div>
+              </div>
+
+              {bonus > 0 && (
+                <div className="form-section">
+                  <div className="bonus-info">
+                    <span>Bônus disponível: R$ {bonus.toFixed(2)}</span>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={useBonus}
+                        onChange={(e) => setUseBonus(e.target.checked)}
+                      />
+                      <span>Utilizar bônus</span>
+                    </label>
+                  </div>
+                </div>
+              )}
+
+              <div className="step-actions">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={handleBack}
+                >
+                  ← Voltar
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleNext}
+                  disabled={!positions || !value || parseFloat(value) <= 0}
+                >
+                  Continuar →
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* ETAPA 4: Selecionar Sorteios */}
+          {currentStep === 4 && betType === 'normal' && (
+            <div className="step-content">
+              <h2>Selecione os Sorteios</h2>
+              
+              {selectedExtractions.length === 0 && (
+                <div className="warning-box">
+                  Nenhum sorteio selecionado
+                </div>
+              )}
+
+              <div className="extractions-list">
+                {extractions
+                  .filter((e) => e.type === 'normal' && e.is_active)
+                  .map((extraction) => (
+                    <label key={extraction.id} className="extraction-item">
+                      <input
+                        type="checkbox"
+                        checked={selectedExtractions.some((e) => e.id === extraction.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedExtractions([...selectedExtractions, extraction]);
+                          } else {
+                            setSelectedExtractions(
+                              selectedExtractions.filter((ex) => ex.id !== extraction.id)
+                            );
+                          }
+                        }}
+                      />
+                      <div className="extraction-info">
+                        <span className="extraction-name">{extraction.description}</span>
+                        <span className="extraction-time">Fecha às {extraction.close_time}</span>
+                      </div>
+                    </label>
+                  ))}
               </div>
 
               <div className="step-actions">
@@ -515,60 +695,83 @@ const Apostar = () => {
                   type="button"
                   className="btn btn-primary"
                   onClick={handleNext}
-                  disabled={!betValue || !positions || !value}
+                  disabled={selectedExtractions.length === 0}
                 >
-                  Próximo →
+                  Continuar →
                 </button>
               </div>
             </div>
           )}
 
-          {/* ETAPA 3: Confirmação */}
-          {currentStep === 3 && (
+          {/* ETAPA 5: Confirmação */}
+          {currentStep === 5 && (
             <form onSubmit={handleSubmit} className="step-content">
-              <h2>Confirme sua Aposta</h2>
+              <h2>Estamos quase lá!</h2>
 
               {calculation && (
-                <div className="calculation-card">
-                  <h3>Resumo da Aposta</h3>
-                  <div className="calculation-details">
-                    <div className="calc-row">
-                      <span className="highlight">Modalidade:</span>
+                <div className="confirmation-summary">
+                  <div className="bet-details">
+                    <div className="detail-row">
+                      <span>Palpite:</span>
+                      <span className="bet-value">
+                        {isGroupModality() 
+                          ? selectedAnimals.map((id) => String(id).padStart(2, '0')).join(', ')
+                          : selectedNumbers.join(', ')}
+                      </span>
+                    </div>
+                    <div className="detail-row">
+                      <span>Modalidade:</span>
                       <span>{odds[modality]?.name || modality}</span>
                     </div>
-                    {selectedExtraction && (
-                      <div className="calc-row">
-                        <span className="highlight">Extração:</span>
-                        <span>{selectedExtraction.description}</span>
+                    <div className="detail-row">
+                      <span>Números:</span>
+                      <span>
+                        {isGroupModality() 
+                          ? selectedAnimals.map((id) => String(id).padStart(2, '0')).join(', ')
+                          : selectedNumbers.join(', ')}
+                      </span>
+                    </div>
+                    <div className="detail-row">
+                      <span>Posição:</span>
+                      <span>
+                        {positions === '1' ? '1º Prêmio' : 
+                         positions === '1-3' ? '1º ao 3º' :
+                         positions === '1-5' ? '1º ao 5º' : positions}
+                      </span>
+                    </div>
+                    <div className="detail-row">
+                      <span>Quantidade:</span>
+                      <span>{calculation.units} unidade(s) x {positions.includes('-') ? positions.split('-')[1] : '1'} posição(ões)</span>
+                    </div>
+                    {selectedExtractions.length > 0 && (
+                      <div className="detail-row">
+                        <span>Loteria(s):</span>
+                        <span>{selectedExtractions.map((e) => e.description).join(', ')}</span>
                       </div>
                     )}
-                    <div className="calc-row">
-                      <span className="highlight">Valor:</span>
-                      <span>{betValue}</span>
+                  </div>
+
+                  <div className="calculation-summary">
+                    <div className="calc-left">
+                      <div className="calc-item">
+                        <span>Valor Total da Aposta:</span>
+                        <span className="highlight">R$ {calculation.total_value?.toFixed(2)}</span>
+                      </div>
+                      <div className="calc-item">
+                        <span>Valor por palpite:</span>
+                        <span>R$ {calculation.value_per_unit?.toFixed(2)}</span>
+                      </div>
+                      <small>({calculation.units} palpite(s) x R$ {calculation.value_per_unit?.toFixed(2)} = R$ {calculation.total_value?.toFixed(2)})</small>
                     </div>
-                    <div className="calc-row">
-                      <span className="highlight">Posições:</span>
-                      <span>{positions}</span>
-                    </div>
-                    <div className="calc-row">
-                      <span className="highlight">Unidades:</span>
-                      <span>{calculation.units}</span>
-                    </div>
-                    <div className="calc-row">
-                      <span className="highlight">Valor por unidade:</span>
-                      <span>R$ {calculation.value_per_unit?.toFixed(2)}</span>
-                    </div>
-                    <div className="calc-row">
-                      <span className="highlight">Valor total:</span>
-                      <span className="highlight">R$ {calculation.total_value?.toFixed(2)}</span>
-                    </div>
-                    <div className="calc-row">
-                      <span className="highlight">Multiplicador:</span>
-                      <span>{calculation.multiplier}x</span>
-                    </div>
-                    <div className="calc-row">
-                      <span className="highlight">Prêmio potencial:</span>
-                      <span className="prize">R$ {calculation.potential_prize?.toFixed(2)}</span>
+                    <div className="calc-right">
+                      <div className="calc-item">
+                        <span>Prêmio mínimo possível:</span>
+                        <span className="prize">R$ {calculation.potential_prize?.toFixed(2)}</span>
+                      </div>
+                      <div className="calc-item">
+                        <span>Prêmio máximo possível:</span>
+                        <span className="prize">R$ {calculation.potential_prize?.toFixed(2)}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -588,7 +791,7 @@ const Apostar = () => {
                   className="btn btn-primary"
                   disabled={submitting || !calculation}
                 >
-                  {submitting ? 'Processando...' : 'Finalizar Aposta'}
+                  {submitting ? 'Processando...' : 'Finalizar'}
                 </button>
               </div>
             </form>

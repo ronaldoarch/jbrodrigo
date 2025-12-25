@@ -1,0 +1,176 @@
+.number-calculator {
+  width: 100%;
+}
+
+.calculator-header h3 {
+  font-size: 24px;
+  color: var(--bg-dark);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.instruction {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.selected-numbers {
+  margin-bottom: 24px;
+}
+
+.selected-numbers label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--bg-dark);
+  margin-bottom: 12px;
+}
+
+.numbers-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 40px;
+  padding: 12px;
+  background: var(--bg-card-hover);
+  border-radius: 8px;
+  border: 2px solid var(--border-color);
+}
+
+.number-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--primary-color);
+  color: var(--bg-dark);
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.remove-number {
+  background: transparent;
+  border: none;
+  color: var(--bg-dark);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.remove-number:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.input-section {
+  margin-bottom: 24px;
+}
+
+.input-display {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.number-input {
+  flex: 1;
+  padding: 16px;
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  color: var(--bg-dark);
+  letter-spacing: 4px;
+}
+
+.number-input.valid {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(234, 170, 1, 0.2);
+}
+
+.btn-random {
+  padding: 16px 24px;
+  background: var(--success);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-random:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.input-section small {
+  display: block;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.number-keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.keypad-button {
+  padding: 20px;
+  font-size: 20px;
+  font-weight: 700;
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  color: var(--bg-dark);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.keypad-button:hover {
+  border-color: var(--primary-color);
+  background: var(--bg-card-hover);
+  transform: translateY(-2px);
+}
+
+.keypad-button.delete {
+  background: rgba(255, 68, 68, 0.1);
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.keypad-button.insert {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--bg-dark);
+  grid-column: span 2;
+}
+
+.keypad-button.insert:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 768px) {
+  .number-keypad {
+    gap: 8px;
+  }
+
+  .keypad-button {
+    padding: 16px;
+    font-size: 18px;
+  }
+}
+
