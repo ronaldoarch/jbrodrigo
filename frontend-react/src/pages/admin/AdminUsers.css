@@ -1,0 +1,53 @@
+.admin-users {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px 16px;
+  background: var(--bg-card-hover);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 14px;
+  min-width: 250px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.status-active {
+  background: rgba(234, 170, 1, 0.15);
+  color: var(--primary-color);
+}
+
+.status-blocked {
+  background: rgba(255, 68, 68, 0.15);
+  color: var(--error);
+}
+
+.role-badge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.role-admin {
+  background: rgba(234, 170, 1, 0.15);
+  color: var(--primary-color);
+}
+
+.role-user {
+  background: rgba(0, 102, 192, 0.15);
+  color: var(--border-color);
+}
+

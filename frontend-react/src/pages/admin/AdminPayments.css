@@ -1,0 +1,198 @@
+.admin-payments {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.section-header {
+  margin-bottom: 24px;
+}
+
+.section-header h2 {
+  font-size: 24px;
+  color: var(--primary-color);
+  font-weight: 700;
+  margin: 0;
+}
+
+.filters-bar {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filters-bar select {
+  padding: 10px 16px;
+  background: var(--bg-card-hover);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 14px;
+  cursor: pointer;
+  min-width: 200px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filters-bar select:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+}
+
+.admin-table thead {
+  background: var(--bg-card-hover);
+}
+
+.admin-table th {
+  padding: 16px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.admin-table td {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.admin-table tbody tr:hover {
+  background: var(--bg-card-hover);
+}
+
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.type-badge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.type-badge.deposit {
+  background: rgba(234, 170, 1, 0.15);
+  color: var(--primary-color);
+}
+
+.type-badge.withdrawal {
+  background: rgba(255, 68, 68, 0.15);
+  color: var(--error);
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-pending {
+  background: rgba(255, 165, 0, 0.15);
+  color: #ffa500;
+}
+
+.status-completed {
+  background: rgba(234, 170, 1, 0.15);
+  color: var(--primary-color);
+}
+
+.status-failed,
+.status-cancelled {
+  background: rgba(255, 68, 68, 0.15);
+  color: var(--error);
+}
+
+.amount-cell {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-approve,
+.btn-reject,
+.btn-view {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-approve {
+  background: rgba(234, 170, 1, 0.15);
+  color: var(--primary-color);
+}
+
+.btn-approve:hover {
+  background: var(--primary-color);
+  color: var(--bg-dark);
+}
+
+.btn-reject {
+  background: rgba(255, 68, 68, 0.15);
+  color: var(--error);
+}
+
+.btn-reject:hover {
+  background: var(--error);
+  color: white;
+}
+
+.btn-view {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-view:hover {
+  background: var(--bg-card);
+  border-color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+  .admin-table {
+    font-size: 12px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 8px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .btn-approve,
+  .btn-reject,
+  .btn-view {
+    width: 100%;
+  }
+}
+

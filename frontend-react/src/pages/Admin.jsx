@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import api from '../services/api';
+import AdminDashboard from './admin/AdminDashboard';
+import AdminPayments from './admin/AdminPayments';
+import AdminUsers from './admin/AdminUsers';
 import './Admin.css';
 
 const Admin = () => {
   const { user } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeSection, setActiveSection] = useState('dashboard');
-  const [loading, setLoading] = useState(false);
 
   // Verificar se é admin
   useEffect(() => {
@@ -119,93 +120,56 @@ const Admin = () => {
           {activeSection === 'dashboard' && <AdminDashboard />}
           {activeSection === 'payments' && <AdminPayments />}
           {activeSection === 'users' && <AdminUsers />}
-          {activeSection === 'odds' && <AdminOdds />}
-          {activeSection === 'bets' && <AdminBets />}
-          {activeSection === 'extractions' && <AdminExtractions />}
-          {activeSection === 'promotions' && <AdminPromotions />}
-          {activeSection === 'stories' && <AdminStories />}
-          {activeSection === 'settings' && <AdminSettings />}
-          {activeSection === 'modalities' && <AdminModalities />}
-          {activeSection === 'facebook-pixel' && <AdminFacebookPixel />}
-          {activeSection === 'withdrawal-limits' && <AdminWithdrawalLimits />}
+          {activeSection === 'odds' && (
+            <div className="admin-section">
+              <p>Cotações Admin - Em desenvolvimento</p>
+            </div>
+          )}
+          {activeSection === 'bets' && (
+            <div className="admin-section">
+              <p>Apostas Admin - Em desenvolvimento</p>
+            </div>
+          )}
+          {activeSection === 'extractions' && (
+            <div className="admin-section">
+              <p>Extrações Admin - Em desenvolvimento</p>
+            </div>
+          )}
+          {activeSection === 'promotions' && (
+            <div className="admin-section">
+              <p>Promoções Admin - Em desenvolvimento</p>
+            </div>
+          )}
+          {activeSection === 'stories' && (
+            <div className="admin-section">
+              <p>Stories Admin - Em desenvolvimento</p>
+            </div>
+          )}
+          {activeSection === 'settings' && (
+            <div className="admin-section">
+              <p>Configurações Admin - Em desenvolvimento</p>
+            </div>
+          )}
+          {activeSection === 'modalities' && (
+            <div className="admin-section">
+              <p>Modalidades Admin - Em desenvolvimento</p>
+            </div>
+          )}
+          {activeSection === 'facebook-pixel' && (
+            <div className="admin-section">
+              <p>Facebook Pixel Admin - Em desenvolvimento</p>
+            </div>
+          )}
+          {activeSection === 'withdrawal-limits' && (
+            <div className="admin-section">
+              <p>Limites de Saque Admin - Em desenvolvimento</p>
+            </div>
+          )}
         </div>
       </main>
     </div>
   );
 };
-
-// Componentes das seções (placeholders por enquanto)
-const AdminDashboard = () => (
-  <div className="admin-section">
-    <p>Dashboard Admin - Em desenvolvimento</p>
-  </div>
-);
-
-const AdminPayments = () => (
-  <div className="admin-section">
-    <p>Pagamentos Admin - Em desenvolvimento</p>
-  </div>
-);
-
-const AdminUsers = () => (
-  <div className="admin-section">
-    <p>Usuários Admin - Em desenvolvimento</p>
-  </div>
-);
-
-const AdminOdds = () => (
-  <div className="admin-section">
-    <p>Cotações Admin - Em desenvolvimento</p>
-  </div>
-);
-
-const AdminBets = () => (
-  <div className="admin-section">
-    <p>Apostas Admin - Em desenvolvimento</p>
-  </div>
-);
-
-const AdminExtractions = () => (
-  <div className="admin-section">
-    <p>Extrações Admin - Em desenvolvimento</p>
-  </div>
-);
-
-const AdminPromotions = () => (
-  <div className="admin-section">
-    <p>Promoções Admin - Em desenvolvimento</p>
-  </div>
-);
-
-const AdminStories = () => (
-  <div className="admin-section">
-    <p>Stories Admin - Em desenvolvimento</p>
-  </div>
-);
-
-const AdminSettings = () => (
-  <div className="admin-section">
-    <p>Configurações Admin - Em desenvolvimento</p>
-  </div>
-);
-
-const AdminModalities = () => (
-  <div className="admin-section">
-    <p>Modalidades Admin - Em desenvolvimento</p>
-  </div>
-);
-
-const AdminFacebookPixel = () => (
-  <div className="admin-section">
-    <p>Facebook Pixel Admin - Em desenvolvimento</p>
-  </div>
-);
-
-const AdminWithdrawalLimits = () => (
-  <div className="admin-section">
-    <p>Limites de Saque Admin - Em desenvolvimento</p>
-  </div>
-);
 
 export default Admin;
 
