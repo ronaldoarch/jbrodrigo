@@ -369,12 +369,12 @@ const Apostar = () => {
                   </div>
                 </div>
 
-                {/* Coluna Direita - Milhares */}
+                {/* Coluna Direita - Todas as outras modalidades em ordem */}
                 <div className="modality-column">
                   <h3 className="column-title">Milhar</h3>
                   <div className="modalities-list">
-                    {/* Dezenas primeiro */}
-                    {modalityGroups.dezenas.map((mod, index) => (
+                    {/* Dezena (6) */}
+                    {modalityGroups.dezenas.filter(m => m.key === 'dezena').map((mod) => (
                       <div
                         key={mod.key}
                         className={`modality-card ${modality === mod.key ? 'selected' : ''}`}
@@ -383,15 +383,15 @@ const Apostar = () => {
                         {modality === mod.key && (
                           <div className="selected-icon">🎯</div>
                         )}
-                        <div className="modality-number">{index + 6}.</div>
+                        <div className="modality-number">6.</div>
                         <div className="modality-content">
                           <h4>{mod.name}</h4>
                           <p>1x R$ {mod.multiplier?.toFixed(2).replace('.', ',')}</p>
                         </div>
                       </div>
                     ))}
-                    {/* Centenas */}
-                    {modalityGroups.centenas.map((mod, index) => (
+                    {/* Centena (7) */}
+                    {modalityGroups.centenas.filter(m => m.key === 'centena').map((mod) => (
                       <div
                         key={mod.key}
                         className={`modality-card ${modality === mod.key ? 'selected' : ''}`}
@@ -400,15 +400,15 @@ const Apostar = () => {
                         {modality === mod.key && (
                           <div className="selected-icon">🎯</div>
                         )}
-                        <div className="modality-number">{index + 7}.</div>
+                        <div className="modality-number">7.</div>
                         <div className="modality-content">
                           <h4>{mod.name}</h4>
                           <p>1x R$ {mod.multiplier?.toFixed(2).replace('.', ',')}</p>
                         </div>
                       </div>
                     ))}
-                    {/* Milhares */}
-                    {modalityGroups.milhares.map((mod, index) => (
+                    {/* Milhar (8) */}
+                    {modalityGroups.milhares.filter(m => m.key === 'milhar').map((mod) => (
                       <div
                         key={mod.key}
                         className={`modality-card ${modality === mod.key ? 'selected' : ''}`}
@@ -417,15 +417,15 @@ const Apostar = () => {
                         {modality === mod.key && (
                           <div className="selected-icon">🎯</div>
                         )}
-                        <div className="modality-number">{index + 8}.</div>
+                        <div className="modality-number">8.</div>
                         <div className="modality-content">
                           <h4>{mod.name}</h4>
                           <p>1x R$ {mod.multiplier?.toFixed(2).replace('.', ',')}</p>
                         </div>
                       </div>
                     ))}
-                    {/* Passe */}
-                    {modalityGroups.passe.map((mod, index) => (
+                    {/* Milhar/Centena (9) */}
+                    {modalityGroups.milhares.filter(m => m.key === 'milhar-centena').map((mod) => (
                       <div
                         key={mod.key}
                         className={`modality-card ${modality === mod.key ? 'selected' : ''}`}
@@ -434,7 +434,58 @@ const Apostar = () => {
                         {modality === mod.key && (
                           <div className="selected-icon">🎯</div>
                         )}
-                        <div className="modality-number">{index + 11}.</div>
+                        <div className="modality-number">9.</div>
+                        <div className="modality-content">
+                          <h4>{mod.name}</h4>
+                          <p>1x R$ {mod.multiplier?.toFixed(2).replace('.', ',')}</p>
+                        </div>
+                      </div>
+                    ))}
+                    {/* Dezena Invertida (10) */}
+                    {modalityGroups.dezenas.filter(m => m.key === 'dezena-invertida').map((mod) => (
+                      <div
+                        key={mod.key}
+                        className={`modality-card ${modality === mod.key ? 'selected' : ''}`}
+                        onClick={() => setModality(mod.key)}
+                      >
+                        {modality === mod.key && (
+                          <div className="selected-icon">🎯</div>
+                        )}
+                        <div className="modality-number">10.</div>
+                        <div className="modality-content">
+                          <h4>{mod.name}</h4>
+                          <p>1x R$ {mod.multiplier?.toFixed(2).replace('.', ',')}</p>
+                        </div>
+                      </div>
+                    ))}
+                    {/* Centena Invertida (11) */}
+                    {modalityGroups.centenas.filter(m => m.key === 'centena-invertida').map((mod) => (
+                      <div
+                        key={mod.key}
+                        className={`modality-card ${modality === mod.key ? 'selected' : ''}`}
+                        onClick={() => setModality(mod.key)}
+                      >
+                        {modality === mod.key && (
+                          <div className="selected-icon">🎯</div>
+                        )}
+                        <div className="modality-number">11.</div>
+                        <div className="modality-content">
+                          <h4>{mod.name}</h4>
+                          <p>1x R$ {mod.multiplier?.toFixed(2).replace('.', ',')}</p>
+                        </div>
+                      </div>
+                    ))}
+                    {/* Milhar Invertida (12) */}
+                    {modalityGroups.milhares.filter(m => m.key === 'milhar-invertida').map((mod) => (
+                      <div
+                        key={mod.key}
+                        className={`modality-card ${modality === mod.key ? 'selected' : ''}`}
+                        onClick={() => setModality(mod.key)}
+                      >
+                        {modality === mod.key && (
+                          <div className="selected-icon">🎯</div>
+                        )}
+                        <div className="modality-number">12.</div>
                         <div className="modality-content">
                           <h4>{mod.name}</h4>
                           <p>1x R$ {mod.multiplier?.toFixed(2).replace('.', ',')}</p>
