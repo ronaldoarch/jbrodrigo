@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// URL da API - usar variável de ambiente ou padrão do Coolify
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://dsssg0wkk4cwcgcckkwsco0w.agenciamidas.com';
 
 const api = axios.create({

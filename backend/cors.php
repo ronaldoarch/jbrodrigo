@@ -8,8 +8,9 @@ function setCorsHeaders() {
     // Lista de origens permitidas
     // IMPORTANTE: Configure com seus domínios reais em produção
     $allowedOrigins = [
-        'https://seudominio.com.br',
-        'https://www.seudominio.com.br',
+        'https://tradicaodobicho.site',
+        'https://www.tradicaodobicho.site',
+        'https://dsssg0wkk4cwcgcckkwsco0w.agenciamidas.com',
         'http://localhost:3000', // Para desenvolvimento
         'http://localhost:5173', // Vite dev server
     ];
