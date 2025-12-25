@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-require_once __DIR__ . '/../scraper/config/database.php';
+require_once __DIR__ . '/../backend/scraper/config/database.php';
 
 try {
     $db = getDB();

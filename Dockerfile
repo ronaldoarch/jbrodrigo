@@ -41,14 +41,14 @@ COPY .htaccess /var/www/html/.htaccess
 
 # Criar database.php a partir do exemplo (se não existir)
 # Garantir que o diretório existe
-RUN mkdir -p /var/www/html/scraper/config
+RUN mkdir -p /var/www/html/backend/scraper/config
 
 # Criar database.php se não existir
-RUN if [ ! -f /var/www/html/scraper/config/database.php ]; then \
-    if [ -f /var/www/html/scraper/config/database.example.php ]; then \
-        cp /var/www/html/scraper/config/database.example.php /var/www/html/scraper/config/database.php; \
+RUN if [ ! -f /var/www/html/backend/scraper/config/database.php ]; then \
+    if [ -f /var/www/html/backend/scraper/config/database.example.php ]; then \
+        cp /var/www/html/backend/scraper/config/database.example.php /var/www/html/backend/scraper/config/database.php; \
     else \
-        echo "<?php function getDB() { throw new Exception('Database not configured'); }" > /var/www/html/scraper/config/database.php; \
+        echo "<?php function getDB() { throw new Exception('Database not configured'); }" > /var/www/html/backend/scraper/config/database.php; \
     fi \
     fi
 
