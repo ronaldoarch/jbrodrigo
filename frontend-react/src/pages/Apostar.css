@@ -7,6 +7,30 @@
   margin-bottom: 32px;
   color: var(--primary-color);
   font-weight: 700;
+  text-align: center;
+}
+
+.step-content {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.step-content h2 {
+  color: var(--bg-dark);
+  font-size: 28px;
+  margin-bottom: 32px;
+  font-weight: 700;
+}
+
+.step-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 32px;
+  justify-content: space-between;
+}
+
+.step-actions .btn {
+  flex: 1;
+  max-width: 200px;
 }
 
 /* Barra de Progresso */
