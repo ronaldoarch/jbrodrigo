@@ -27,8 +27,14 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response?.status === 401) {
-      // Não autenticado - redirecionar para login
+    // Não redirecionar se já estamos na página de login
+    // Não redirecionar se a requisição é para verificar autenticação (me.php)
+    const isLoginPage = window.location.pathname === '/login' || window.location.pathname === '/login/';
+    const isAuthCheck = error.config?.url?.includes('/auth/me.php');
+    
+    if (error.response?.status === 401 && !isLoginPage && !isAuthCheck) {
+      // Não autenticado - redirecionar para login apenas se não estiver na página de login
+      // e não for uma verificação de autenticação
       window.location.href = '/login';
     }
     return Promise.reject(error);
