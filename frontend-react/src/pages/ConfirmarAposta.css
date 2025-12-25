@@ -1,0 +1,139 @@
+.confirmar-aposta {
+  padding: 40px 0;
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirmation-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 48px;
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.success-icon {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  color: var(--bg-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;
+  font-weight: 700;
+  margin: 0 auto 24px;
+  box-shadow: 0 0 30px rgba(234, 170, 1, 0.4);
+  animation: scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.confirmation-card h1 {
+  font-size: 32px;
+  color: var(--primary-color);
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.confirmation-message {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.bet-summary {
+  background: var(--bg-card-hover);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.summary-row:last-child {
+  border-bottom: none;
+}
+
+.summary-row .label {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.summary-row .value {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.summary-row .value.highlight {
+  color: var(--primary-color);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.confirmation-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.confirmation-actions .btn {
+  min-width: 200px;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .confirmation-card {
+    padding: 32px 24px;
+    border-radius: 16px;
+  }
+
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    font-size: 48px;
+  }
+
+  .confirmation-card h1 {
+    font-size: 24px;
+  }
+
+  .confirmation-message {
+    font-size: 16px;
+  }
+
+  .confirmation-actions {
+    flex-direction: column;
+  }
+
+  .confirmation-actions .btn {
+    width: 100%;
+    min-width: auto;
+  }
+}
+

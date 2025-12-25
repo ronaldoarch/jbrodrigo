@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Apostar from './pages/Apostar';
+import ConfirmarAposta from './pages/ConfirmarAposta';
 import MinhasApostas from './pages/MinhasApostas';
 import Carteira from './pages/Carteira';
 import Resultados from './pages/Resultados';
@@ -50,6 +51,14 @@ function App() {
                 element={
                   <PrivateRoute>
                     <Apostar />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="confirmar-aposta"
+                element={
+                  <PrivateRoute>
+                    <ConfirmarAposta />
                   </PrivateRoute>
                 }
               />
