@@ -33,6 +33,9 @@ RUN echo '<VirtualHost *:80>\n\
 # Copiar arquivos do backend diretamente para raiz
 COPY backend/ /var/www/html/
 
+# Garantir que .htaccess do backend seja copiado
+COPY backend/.htaccess /var/www/html/.htaccess
+
 # Copiar arquivos da API
 COPY api/ /var/www/html/api/
 

@@ -1,35 +1,19 @@
+# Configuração de CORS via Apache
+<IfModule mod_headers.c>
+    # Permitir origens específicas
+    SetEnvIf Origin "^https?://(tradicaodobicho\.site|www\.tradicaodobicho\.site|dsssg0wkk4cwcgcckkwsco0w\.agenciamidas\.com|localhost(:[0-9]+)?)$" AccessControlAllowOrigin=$0
+    Header always set Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
+    
+    # Headers CORS básicos
+    Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+    Header always set Access-Control-Allow-Credentials "true"
+    Header always set Access-Control-Max-Age "86400"
+</IfModule>
+
+# Responder requisições OPTIONS diretamente
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /
-    
-    # Permitir acesso direto a arquivos e diretórios existentes
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    
-    # Não redirecionar arquivos PHP
-    RewriteCond %{REQUEST_FILENAME} !\.php$
-    
-    # Redirecionar para index.php se necessário (para APIs)
-    # RewriteRule ^(.*)$ index.php [QSA,L]
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule ^(.*)$ $1 [R=200,L]
 </IfModule>
-
-# Configurações de segurança
-<IfModule mod_headers.c>
-    Header set X-Content-Type-Options "nosniff"
-    Header set X-Frame-Options "SAMEORIGIN"
-    Header set X-XSS-Protection "1; mode=block"
-</IfModule>
-
-# Compressão GZIP
-<IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
-</IfModule>
-
-# Configurar PHP (se necessário)
-<IfModule mod_php7.c>
-    php_value upload_max_filesize 10M
-    php_value post_max_size 10M
-    php_value memory_limit 256M
-    php_value max_execution_time 180
-</IfModule>
-
