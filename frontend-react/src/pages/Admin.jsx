@@ -22,7 +22,7 @@ const Admin = () => {
   // Verificar se é admin
   useEffect(() => {
     if (user && !user.is_admin) {
-      window.location.href = '/dashboard';
+      window.location.href = '/dashboard'; // ou '/inicio'
     }
   }, [user]);
 

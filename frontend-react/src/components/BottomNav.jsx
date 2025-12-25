@@ -6,6 +6,7 @@ const BottomNav = () => {
 
   const navItems = [
     { path: '/dashboard', icon: '🏠', label: 'MENU', highlight: false },
+    { path: '/inicio', icon: '🏠', label: 'MENU', highlight: false },
     { path: '/resultados', icon: '📊', label: 'RESULTADOS', highlight: false },
     { path: '/apostar', icon: '🎲', label: 'APOSTAR', highlight: true },
     { path: '/minhas-apostas', icon: '📋', label: 'APOSTAS', highlight: false },

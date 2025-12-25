@@ -1,0 +1,151 @@
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import api from '../services/api';
+import useBetSettlement from '../hooks/useBetSettlement';
+import Carousel from '../components/Carousel';
+import './Inicio.css';
+
+const Inicio = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [balance, setBalance] = useState(null);
+  const [banners, setBanners] = useState([]);
+  const [odds, setOdds] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  // Verificação automática de liquidações
+  useBetSettlement(() => {
+    loadBalance();
+  });
+
+  useEffect(() => {
+    loadInicio();
+    
+    // Atualizar cotações a cada 5 minutos
+    const interval = setInterval(() => {
+      loadOdds();
+    }, 5 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const loadInicio = async () => {
+    try {
+      const [bannersRes, oddsRes, balanceRes] = await Promise.all([
+        api.get('/api/banners.php?position=home'),
+        api.get('/backend/bets/odds.php'),
+        api.get('/backend/wallet/balance.php'),
+      ]);
+
+      if (bannersRes.data.success) {
+        setBanners(bannersRes.data.banners || []);
+      }
+      if (oddsRes.data.success) {
+        setOdds(oddsRes.data.odds || {});
+      }
+      if (balanceRes.data.success) {
+        setBalance(balanceRes.data);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar início:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadBalance = async () => {
+    try {
+      const response = await api.get('/backend/wallet/balance.php');
+      if (response.data.success) {
+        setBalance(response.data);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar saldo:', error);
+    }
+  };
+
+  const loadOdds = async () => {
+    try {
+      const response = await api.get('/backend/bets/odds.php');
+      if (response.data.success) {
+        setOdds(response.data.odds || {});
+      }
+    } catch (error) {
+      console.error('Erro ao carregar cotações:', error);
+    }
+  };
+
+  // Modalidades destacadas para a seção de cotações
+  const featuredModalities = [
+    { key: 'quina-grupo', name: 'Quina de Grupo', number: 5 },
+    { key: 'milhar-centena', name: 'Milhar/Centena', number: 9 },
+    { key: 'milhar-invertida', name: 'Milhar Invertida', number: 12 },
+    { key: 'milhar', name: 'Milhar', number: 8 },
+    { key: 'terno-dezena', name: 'Terno de Dezena', number: 14 },
+    { key: 'quadra-grupo', name: 'Quadra de Grupo', number: 4 },
+  ];
+
+  if (loading) {
+    return (
+      <div className="loading">
+        <div className="spinner"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="inicio">
+      {/* Carrossel de Banners */}
+      {banners.length > 0 && (
+        <div className="hero-section">
+          <Carousel banners={banners} />
+        </div>
+      )}
+
+      <div className="container">
+        {/* Seção de Boas-vindas */}
+        <section className="welcome-section">
+          <h1 className="welcome-title">Bem-vindo ao LOTBICHO</h1>
+          <p className="welcome-slogan">A maior cotação do mercado</p>
+        </section>
+
+        {/* Seção de Cotações ao Vivo */}
+        <section className="live-odds-section">
+          <h2 className="section-title">COTAÇÃO AO VIVO</h2>
+          <div className="odds-grid">
+            {featuredModalities.map((mod) => {
+              const odd = odds[mod.key] || { multiplier: 0, name: mod.name };
+              return (
+                <div key={mod.key} className="odds-card">
+                  <div className="odds-number">{mod.number}.</div>
+                  <h3 className="odds-name">{odd.name || mod.name}</h3>
+                  <div className="odds-value">
+                    1x R$ {odd.multiplier?.toFixed(2).replace('.', ',') || '0,00'}
+                  </div>
+                  <button
+                    className="btn-play"
+                    onClick={() => navigate('/apostar')}
+                  >
+                    JOGAR
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Seção de Resultados */}
+        <section className="results-section">
+          <h2 className="section-title">RESULTADOS</h2>
+          <div className="results-content">
+            <p className="no-results">Nenhum resultado disponível no momento.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+};
+
+export default Inicio;
+

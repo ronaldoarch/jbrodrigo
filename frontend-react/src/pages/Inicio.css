@@ -1,0 +1,167 @@
+.inicio {
+  padding: 0;
+  min-height: calc(100vh - 200px);
+}
+
+/* Hero Section com Carrossel */
+.hero-section {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+/* Seção de Boas-vindas */
+.welcome-section {
+  background: linear-gradient(135deg, #1a4d7a 0%, #2d6ba0 100%);
+  padding: 60px 20px;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.welcome-title {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 16px;
+  text-shadow: 0 2px 8px rgba(234, 170, 1, 0.3);
+}
+
+.welcome-slogan {
+  font-size: 20px;
+  color: white;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Seção de Cotações ao Vivo */
+.live-odds-section {
+  background: #000000;
+  padding: 40px 20px;
+  margin-bottom: 0;
+}
+
+.section-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 32px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.odds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.odds-card {
+  background: #000000;
+  border: 2px solid var(--primary-color);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.odds-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(234, 170, 1, 0.4);
+  border-color: var(--primary-color);
+}
+
+.odds-number {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.odds-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  margin: 8px 0 16px 0;
+}
+
+.odds-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+}
+
+.btn-play {
+  width: 100%;
+  padding: 14px 24px;
+  background: var(--primary-color);
+  color: var(--bg-dark);
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-play:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(234, 170, 1, 0.5);
+  background: #ffc107;
+}
+
+/* Seção de Resultados */
+.results-section {
+  background: #000000;
+  padding: 40px 20px;
+}
+
+.results-content {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.no-results {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .welcome-title {
+    font-size: 36px;
+  }
+
+  .welcome-slogan {
+    font-size: 16px;
+  }
+
+  .section-title {
+    font-size: 24px;
+  }
+
+  .odds-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .odds-card {
+    padding: 20px;
+  }
+
+  .odds-name {
+    font-size: 18px;
+  }
+
+  .odds-value {
+    font-size: 20px;
+  }
+}
+

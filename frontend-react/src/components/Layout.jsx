@@ -16,7 +16,7 @@ const Layout = () => {
 
   useEffect(() => {
     // Mostrar hero banner apenas em páginas específicas
-    const heroPages = ['/dashboard', '/', '/apostar'];
+    const heroPages = ['/dashboard', '/inicio', '/', '/apostar'];
     setShowHero(heroPages.includes(location.pathname));
     
     if (showHero) {
@@ -55,9 +55,9 @@ const Layout = () => {
                   <>
                     <Link 
                       to="/dashboard" 
-                      className={isActive('/dashboard') ? 'active' : ''}
+                      className={isActive('/dashboard') || isActive('/inicio') ? 'active' : ''}
                     >
-                      Dashboard
+                      Início
                     </Link>
                     <Link 
                       to="/apostar" 

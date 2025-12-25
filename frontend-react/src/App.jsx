@@ -5,7 +5,7 @@ import PrivateRoute from './components/PrivateRoute';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
+import Inicio from './pages/Inicio';
 import Apostar from './pages/Apostar';
 import ConfirmarAposta from './pages/ConfirmarAposta';
 import MinhasApostas from './pages/MinhasApostas';
@@ -27,7 +27,7 @@ function App() {
                 path="dashboard"
                 element={
                   <PrivateRoute>
-                    <Dashboard />
+                    <Inicio />
                   </PrivateRoute>
                 }
               />
@@ -35,7 +35,23 @@ function App() {
                 path="dashboard.php"
                 element={
                   <PrivateRoute>
-                    <Dashboard />
+                    <Inicio />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="inicio"
+                element={
+                  <PrivateRoute>
+                    <Inicio />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="inicio.php"
+                element={
+                  <PrivateRoute>
+                    <Inicio />
                   </PrivateRoute>
                 }
               />

@@ -15,7 +15,7 @@ const Home = () => {
   useEffect(() => {
     // Redirecionar para dashboard se autenticado
     if (!authLoading && user) {
-      navigate('/dashboard');
+      navigate('/dashboard'); // ou '/inicio'
       return;
     }
     loadData();

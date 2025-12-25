@@ -40,7 +40,7 @@ const Login = () => {
       }
 
       if (result.success) {
-        navigate('/dashboard');
+        navigate('/dashboard'); // ou '/inicio'
       } else {
         setError(result.error || 'Erro ao processar solicitação');
       }
