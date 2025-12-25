@@ -33,6 +33,9 @@ RUN echo '<VirtualHost *:80>\n\
 # Copiar arquivos do backend
 COPY backend/ /var/www/html/
 
+# Copiar arquivos da API (que estão na raiz)
+COPY api/ /var/www/html/api/
+
 # Configurar permissões
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
@@ -43,8 +46,8 @@ RUN mkdir -p /var/www/html/logs && chown www-data:www-data /var/www/html/logs
 # Expor porta
 EXPOSE 80
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+# Health check - usar endpoint da API que sempre existe
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD curl -f http://localhost/api/config.php || exit 1
 
 # Comando padrão
