@@ -36,6 +36,9 @@ COPY backend/ /var/www/html/
 # Copiar arquivos da API
 COPY api/ /var/www/html/api/
 
+# Copiar database.sql para uso em importação
+COPY database.sql /tmp/database.sql
+
 # Criar database.php a partir do exemplo (se não existir)
 RUN if [ ! -f /var/www/html/scraper/config/database.php ]; then \
     cp /var/www/html/scraper/config/database.example.php /var/www/html/scraper/config/database.php; \
