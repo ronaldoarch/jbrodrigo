@@ -332,112 +332,116 @@ const Apostar = () => {
             <div className="step-content">
               <h2>Selecione a Modalidade</h2>
               
-              <div className="form-section">
-                <h3>Tipo de Aposta</h3>
-                <div className="radio-group">
-                  <label>
-                    <input
-                      type="radio"
-                      value="normal"
-                      checked={betType === 'normal'}
-                      onChange={(e) => setBetType(e.target.value)}
-                    />
-                    <span>Aposta Normal</span>
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      value="instant"
-                      checked={betType === 'instant'}
-                      onChange={(e) => setBetType(e.target.value)}
-                    />
-                    <span>Aposta Instantânea</span>
-                  </label>
-                </div>
+              {/* Checkbox Aposta Instantânea no topo */}
+              <div className="instant-bet-toggle">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={betType === 'instant'}
+                    onChange={(e) => setBetType(e.target.checked ? 'instant' : 'normal')}
+                  />
+                  <span>Aposta Instantânea</span>
+                </label>
               </div>
 
-              {/* Grupos */}
-              <div className="form-section">
-                <h3>Grupos</h3>
-                <div className="modalities-grid">
-                  {modalityGroups.grupos.map((mod) => (
-                    <div
-                      key={mod.key}
-                      className={`modality-card ${modality === mod.key ? 'selected' : ''}`}
-                      onClick={() => setModality(mod.key)}
-                    >
-                      <h4>{mod.name}</h4>
-                      <p>1x R$ {mod.multiplier?.toFixed(2)}</p>
-                    </div>
-                  ))}
+              {/* Layout em duas colunas para Grupos e Milhares */}
+              <div className="modalities-two-columns">
+                {/* Coluna Esquerda - Grupos */}
+                <div className="modality-column">
+                  <h3 className="column-title">Grupo</h3>
+                  <div className="modalities-list">
+                    {modalityGroups.grupos.map((mod, index) => (
+                      <div
+                        key={mod.key}
+                        className={`modality-card ${modality === mod.key ? 'selected' : ''}`}
+                        onClick={() => setModality(mod.key)}
+                      >
+                        {modality === mod.key && (
+                          <div className="selected-icon">🎯</div>
+                        )}
+                        <div className="modality-number">{index + 1}.</div>
+                        <div className="modality-content">
+                          <h4>{mod.name}</h4>
+                          <p>1x R$ {mod.multiplier?.toFixed(2).replace('.', ',')}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Dezenas */}
-              <div className="form-section">
-                <h3>Dezenas</h3>
-                <div className="modalities-grid">
-                  {modalityGroups.dezenas.map((mod) => (
-                    <div
-                      key={mod.key}
-                      className={`modality-card ${modality === mod.key ? 'selected' : ''}`}
-                      onClick={() => setModality(mod.key)}
-                    >
-                      <h4>{mod.name}</h4>
-                      <p>1x R$ {mod.multiplier?.toFixed(2)}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Centenas */}
-              <div className="form-section">
-                <h3>Centenas</h3>
-                <div className="modalities-grid">
-                  {modalityGroups.centenas.map((mod) => (
-                    <div
-                      key={mod.key}
-                      className={`modality-card ${modality === mod.key ? 'selected' : ''}`}
-                      onClick={() => setModality(mod.key)}
-                    >
-                      <h4>{mod.name}</h4>
-                      <p>1x R$ {mod.multiplier?.toFixed(2)}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Milhares */}
-              <div className="form-section">
-                <h3>Milhares</h3>
-                <div className="modalities-grid">
-                  {modalityGroups.milhares.map((mod) => (
-                    <div
-                      key={mod.key}
-                      className={`modality-card ${modality === mod.key ? 'selected' : ''}`}
-                      onClick={() => setModality(mod.key)}
-                    >
-                      <h4>{mod.name}</h4>
-                      <p>1x R$ {mod.multiplier?.toFixed(2)}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Passe */}
-              <div className="form-section">
-                <h3>Passe</h3>
-                <div className="modalities-grid">
-                  {modalityGroups.passe.map((mod) => (
-                    <div
-                      key={mod.key}
-                      className={`modality-card ${modality === mod.key ? 'selected' : ''}`}
-                      onClick={() => setModality(mod.key)}
-                    >
-                      <h4>{mod.name}</h4>
-                      <p>1x R$ {mod.multiplier?.toFixed(2)}</p>
-                    </div>
-                  ))}
+                {/* Coluna Direita - Milhares */}
+                <div className="modality-column">
+                  <h3 className="column-title">Milhar</h3>
+                  <div className="modalities-list">
+                    {/* Dezenas primeiro */}
+                    {modalityGroups.dezenas.map((mod, index) => (
+                      <div
+                        key={mod.key}
+                        className={`modality-card ${modality === mod.key ? 'selected' : ''}`}
+                        onClick={() => setModality(mod.key)}
+                      >
+                        {modality === mod.key && (
+                          <div className="selected-icon">🎯</div>
+                        )}
+                        <div className="modality-number">{index + 6}.</div>
+                        <div className="modality-content">
+                          <h4>{mod.name}</h4>
+                          <p>1x R$ {mod.multiplier?.toFixed(2).replace('.', ',')}</p>
+                        </div>
+                      </div>
+                    ))}
+                    {/* Centenas */}
+                    {modalityGroups.centenas.map((mod, index) => (
+                      <div
+                        key={mod.key}
+                        className={`modality-card ${modality === mod.key ? 'selected' : ''}`}
+                        onClick={() => setModality(mod.key)}
+                      >
+                        {modality === mod.key && (
+                          <div className="selected-icon">🎯</div>
+                        )}
+                        <div className="modality-number">{index + 7}.</div>
+                        <div className="modality-content">
+                          <h4>{mod.name}</h4>
+                          <p>1x R$ {mod.multiplier?.toFixed(2).replace('.', ',')}</p>
+                        </div>
+                      </div>
+                    ))}
+                    {/* Milhares */}
+                    {modalityGroups.milhares.map((mod, index) => (
+                      <div
+                        key={mod.key}
+                        className={`modality-card ${modality === mod.key ? 'selected' : ''}`}
+                        onClick={() => setModality(mod.key)}
+                      >
+                        {modality === mod.key && (
+                          <div className="selected-icon">🎯</div>
+                        )}
+                        <div className="modality-number">{index + 8}.</div>
+                        <div className="modality-content">
+                          <h4>{mod.name}</h4>
+                          <p>1x R$ {mod.multiplier?.toFixed(2).replace('.', ',')}</p>
+                        </div>
+                      </div>
+                    ))}
+                    {/* Passe */}
+                    {modalityGroups.passe.map((mod, index) => (
+                      <div
+                        key={mod.key}
+                        className={`modality-card ${modality === mod.key ? 'selected' : ''}`}
+                        onClick={() => setModality(mod.key)}
+                      >
+                        {modality === mod.key && (
+                          <div className="selected-icon">🎯</div>
+                        )}
+                        <div className="modality-number">{index + 11}.</div>
+                        <div className="modality-content">
+                          <h4>{mod.name}</h4>
+                          <p>1x R$ {mod.multiplier?.toFixed(2).replace('.', ',')}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
