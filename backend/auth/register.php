@@ -4,6 +4,7 @@
  */
 
 require_once __DIR__ . '/../cors.php';
+require_once __DIR__ . '/../session-config.php';
 require_once __DIR__ . '/../scraper/config/database.php';
 require_once __DIR__ . '/../utils/auth-helper.php';
 

@@ -4,6 +4,7 @@
  */
 
 require_once __DIR__ . '/../scraper/config/database.php';
+require_once __DIR__ . '/../session-config.php';
 
 /**
  * Requer autenticação do usuário

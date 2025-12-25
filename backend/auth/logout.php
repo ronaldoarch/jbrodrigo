@@ -3,6 +3,7 @@
  * Logout de Usuário
  */
 
+require_once __DIR__ . '/../session-config.php';
 session_start();
 
 $_SESSION = array();
