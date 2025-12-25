@@ -11,6 +11,7 @@ import ConfirmarAposta from './pages/ConfirmarAposta';
 import MinhasApostas from './pages/MinhasApostas';
 import Carteira from './pages/Carteira';
 import Resultados from './pages/Resultados';
+import Admin from './pages/Admin';
 
 function App() {
   return (
@@ -96,6 +97,22 @@ function App() {
               />
               <Route path="resultados" element={<Resultados />} />
               <Route path="resultados.php" element={<Resultados />} />
+              <Route
+                path="admin"
+                element={
+                  <PrivateRoute requireAdmin>
+                    <Admin />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="admin.php"
+                element={
+                  <PrivateRoute requireAdmin>
+                    <Admin />
+                  </PrivateRoute>
+                }
+              />
             </Route>
           </Routes>
         </Router>
