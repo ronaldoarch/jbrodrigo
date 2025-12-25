@@ -1,0 +1,74 @@
+.admin-facebook-pixel {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.admin-facebook-pixel h2 {
+  font-size: 24px;
+  color: var(--primary-color);
+  font-weight: 700;
+  margin-bottom: 32px;
+}
+
+.settings-section {
+  background: var(--bg-card-hover);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.event-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.event-item:hover {
+  border-color: var(--primary-color);
+}
+
+.event-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  cursor: pointer;
+}
+
+.event-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.event-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 16px;
+}
+
+.event-description {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.settings-actions {
+  margin-top: 24px;
+}
+
+.settings-actions .btn {
+  min-width: 200px;
+}
+

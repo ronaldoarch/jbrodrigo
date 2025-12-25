@@ -1,0 +1,71 @@
+.admin-extractions {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.days-checkboxes {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.day-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--bg-card-hover);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.day-checkbox:hover {
+  border-color: var(--primary-color);
+}
+
+.day-checkbox input[type="checkbox"]:checked + span {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.day-checkbox input[type="checkbox"]:checked ~ span {
+  border-color: var(--primary-color);
+}
+
+.days-badge {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.day-tag {
+  padding: 2px 6px;
+  background: var(--bg-card-hover);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .header-actions {
+    flex-direction: column;
+  }
+
+  .header-actions .btn {
+    width: 100%;
+  }
+
+  .days-checkboxes {
+    flex-direction: column;
+  }
+}
+

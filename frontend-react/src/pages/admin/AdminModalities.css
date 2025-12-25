@@ -1,0 +1,85 @@
+.admin-modalities {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.modalities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.modality-group {
+  background: var(--bg-card-hover);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.group-title {
+  font-size: 18px;
+  color: var(--primary-color);
+  font-weight: 600;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modalities-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modality-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modality-item:hover {
+  border-color: var(--primary-color);
+  background: var(--bg-card-hover);
+}
+
+.modality-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.modality-name {
+  flex: 1;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.modality-status {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.modality-status.active {
+  background: rgba(234, 170, 1, 0.15);
+  color: var(--primary-color);
+}
+
+.modality-status.inactive {
+  background: rgba(255, 68, 68, 0.15);
+  color: var(--error);
+}
+
+@media (max-width: 768px) {
+  .modalities-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

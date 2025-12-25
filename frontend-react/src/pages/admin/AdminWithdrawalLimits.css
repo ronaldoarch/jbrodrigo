@@ -1,0 +1,26 @@
+.admin-withdrawal-limits {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.admin-withdrawal-limits h2 {
+  font-size: 24px;
+  color: var(--primary-color);
+  font-weight: 700;
+  margin-bottom: 32px;
+}
+
+.settings-section {
+  background: var(--bg-card-hover);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.settings-actions {
+  margin-top: 24px;
+}
+
+.settings-actions .btn {
+  min-width: 200px;
+}
+

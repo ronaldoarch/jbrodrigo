@@ -3,6 +3,12 @@ import { useAuth } from '../contexts/AuthContext';
 import AdminDashboard from './admin/AdminDashboard';
 import AdminPayments from './admin/AdminPayments';
 import AdminUsers from './admin/AdminUsers';
+import AdminOdds from './admin/AdminOdds';
+import AdminExtractions from './admin/AdminExtractions';
+import AdminModalities from './admin/AdminModalities';
+import AdminSettings from './admin/AdminSettings';
+import AdminFacebookPixel from './admin/AdminFacebookPixel';
+import AdminWithdrawalLimits from './admin/AdminWithdrawalLimits';
 import './Admin.css';
 
 const Admin = () => {
@@ -120,21 +126,13 @@ const Admin = () => {
           {activeSection === 'dashboard' && <AdminDashboard />}
           {activeSection === 'payments' && <AdminPayments />}
           {activeSection === 'users' && <AdminUsers />}
-          {activeSection === 'odds' && (
-            <div className="admin-section">
-              <p>Cotações Admin - Em desenvolvimento</p>
-            </div>
-          )}
+          {activeSection === 'odds' && <AdminOdds />}
           {activeSection === 'bets' && (
             <div className="admin-section">
               <p>Apostas Admin - Em desenvolvimento</p>
             </div>
           )}
-          {activeSection === 'extractions' && (
-            <div className="admin-section">
-              <p>Extrações Admin - Em desenvolvimento</p>
-            </div>
-          )}
+          {activeSection === 'extractions' && <AdminExtractions />}
           {activeSection === 'promotions' && (
             <div className="admin-section">
               <p>Promoções Admin - Em desenvolvimento</p>
@@ -145,26 +143,10 @@ const Admin = () => {
               <p>Stories Admin - Em desenvolvimento</p>
             </div>
           )}
-          {activeSection === 'settings' && (
-            <div className="admin-section">
-              <p>Configurações Admin - Em desenvolvimento</p>
-            </div>
-          )}
-          {activeSection === 'modalities' && (
-            <div className="admin-section">
-              <p>Modalidades Admin - Em desenvolvimento</p>
-            </div>
-          )}
-          {activeSection === 'facebook-pixel' && (
-            <div className="admin-section">
-              <p>Facebook Pixel Admin - Em desenvolvimento</p>
-            </div>
-          )}
-          {activeSection === 'withdrawal-limits' && (
-            <div className="admin-section">
-              <p>Limites de Saque Admin - Em desenvolvimento</p>
-            </div>
-          )}
+          {activeSection === 'settings' && <AdminSettings />}
+          {activeSection === 'modalities' && <AdminModalities />}
+          {activeSection === 'facebook-pixel' && <AdminFacebookPixel />}
+          {activeSection === 'withdrawal-limits' && <AdminWithdrawalLimits />}
         </div>
       </main>
     </div>
