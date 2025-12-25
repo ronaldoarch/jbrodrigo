@@ -5,13 +5,32 @@
 }
 
 :root {
-  --primary-color: #00ff88;
-  --secondary-color: #004785;
-  --background: #0a0a0a;
-  --text: #ffffff;
-  --accent: #EAAA01;
-  --card-bg: #1a1a1a;
-  --border: #333333;
+  /* Cores Principais */
+  --primary-color: #EAAA01;        /* Dourado/Amarelo principal */
+  --primary-dark: #C89401;         /* Dourado escuro */
+  --primary-light: #FFC107;        /* Dourado claro */
+
+  --bg-dark: #004785;              /* Azul escuro principal */
+  --bg-darker: #003366;            /* Azul mais escuro */
+  --bg-card: #0056A3;              /* Azul para cards */
+  --bg-card-hover: #0066C0;        /* Azul hover dos cards */
+
+  --text-primary: #ffffff;         /* Texto branco */
+  --text-secondary: #E0E0E0;        /* Texto cinza claro */
+  --text-muted: #B0B0B0;           /* Texto cinza médio */
+
+  --border-color: #0066C0;         /* Borda azul */
+  --border-hover: #EAAA01;         /* Borda dourada no hover */
+
+  --success: #EAAA01;              /* Sucesso (dourado) */
+  --error: #ff4444;                /* Erro (vermelho) */
+  --warning: #ffaa00;              /* Aviso (laranja) */
+
+  /* Sombras e Efeitos */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(234, 170, 1, 0.4); /* Brilho dourado */
 }
 
 body {
@@ -20,9 +39,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--background);
-  color: var(--text);
+  background: linear-gradient(135deg, #003366 0%, #004785 100%);
+  background-attachment: fixed;
+  color: var(--text-primary);
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 #root {
@@ -30,12 +51,13 @@ body {
 }
 
 a {
-  color: var(--primary-color);
+  color: var(--text-secondary);
   text-decoration: none;
+  transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 a:hover {
-  text-decoration: underline;
+  color: var(--primary-color);
 }
 
 button {
@@ -43,11 +65,13 @@ button {
   border: none;
   outline: none;
   font-family: inherit;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 input, textarea, select {
   font-family: inherit;
   outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .container {
@@ -56,43 +80,151 @@ input, textarea, select {
   padding: 0 20px;
 }
 
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 12px;
+  }
+}
+
+/* Botões */
 .btn {
-  padding: 12px 24px;
-  border-radius: 8px;
+  padding: 14px 28px;
+  border-radius: 12px;
   font-size: 16px;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: inline-block;
   text-align: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
 }
 
 .btn-primary {
-  background-color: var(--primary-color);
-  color: var(--background);
+  background: linear-gradient(135deg, #EAAA01 0%, #C89401 100%);
+  color: #004785;
+  box-shadow: var(--shadow-md);
+  border: none;
 }
 
 .btn-primary:hover {
-  background-color: #00cc6f;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+  background: linear-gradient(135deg, #FFC107 0%, #EAAA01 100%);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+
+.btn-primary:active {
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .btn-secondary {
-  background-color: var(--secondary-color);
-  color: var(--text);
+  background: transparent;
+  color: var(--primary-color);
+  padding: 14px 28px;
+  border-radius: 12px;
+  border: 2px solid var(--primary-color);
 }
 
 .btn-secondary:hover {
-  background-color: #0059a3;
+  background: var(--primary-color);
+  color: var(--bg-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
+/* Cards */
 .card {
-  background-color: var(--card-bg);
-  border-radius: 12px;
+  background: var(--bg-card);
+  border-radius: 16px;
   padding: 24px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-color);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.5s ease-out;
 }
 
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(234, 170, 1, 0.1),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.card:hover {
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  transform: translateY(-4px);
+  background: var(--bg-card-hover);
+}
+
+.card:hover::before {
+  left: 100%;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 12px;
+  }
+}
+
+/* Inputs */
+.input-field {
+  width: 100%;
+  padding: 14px 18px;
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-field::placeholder {
+  color: var(--text-muted);
+}
+
+.input-field:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(234, 170, 1, 0.2), var(--shadow-md);
+  background: var(--bg-card-hover);
+  outline: none;
+}
+
+.input-field:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Loading/Spinner */
 .loading {
   display: flex;
   justify-content: center;
@@ -101,41 +233,156 @@ input, textarea, select {
 }
 
 .spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid var(--border);
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--border-color);
   border-top-color: var(--primary-color);
+  border-right-color: var(--primary-color);
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spin 0.8s linear infinite;
+  position: relative;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
+.spinner::after {
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 3px solid transparent;
+  border-bottom-color: var(--primary-color);
+  border-left-color: var(--primary-color);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: spin 0.6s linear infinite reverse;
+}
+
+/* Alertas */
+.alert {
+  padding: 16px 20px;
+  border-radius: 12px;
+  border-left: 4px solid;
+  animation: slideIn 0.4s ease-out;
+  margin: 16px 0;
+}
+
+.alert-success {
+  background: rgba(234, 170, 1, 0.15);
+  border-color: var(--success);
+  color: var(--success);
+  box-shadow: 0 4px 12px rgba(234, 170, 1, 0.25);
+}
+
+.alert-error {
+  background: rgba(255, 68, 68, 0.15);
+  border-color: var(--error);
+  color: var(--error);
+  box-shadow: 0 4px 12px rgba(255, 68, 68, 0.2);
+}
+
+.alert-warning {
+  background: rgba(255, 170, 0, 0.15);
+  border-color: var(--warning);
+  color: var(--warning);
+  box-shadow: 0 4px 12px rgba(255, 170, 0, 0.2);
 }
 
 .error {
-  color: #ff4444;
-  background-color: rgba(255, 68, 68, 0.1);
-  padding: 12px;
-  border-radius: 8px;
+  color: var(--error);
+  background-color: rgba(255, 68, 68, 0.15);
+  padding: 12px 16px;
+  border-radius: 12px;
   margin: 16px 0;
+  border-left: 4px solid var(--error);
 }
 
 .success {
-  color: var(--primary-color);
-  background-color: rgba(0, 255, 136, 0.1);
-  padding: 12px;
-  border-radius: 8px;
+  color: var(--success);
+  background-color: rgba(234, 170, 1, 0.15);
+  padding: 12px 16px;
+  border-radius: 12px;
   margin: 16px 0;
+  border-left: 4px solid var(--success);
 }
 
+/* Animações */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    opacity: 1; 
+  }
+  50% { 
+    opacity: 0.7; 
+  }
+}
+
+@keyframes shimmer {
+  0% { 
+    background-position: -1000px 0; 
+  }
+  100% { 
+    background-position: 1000px 0; 
+  }
+}
+
+@keyframes spin {
+  to { 
+    transform: rotate(360deg); 
+  }
+}
+
+/* Scrollbar Personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
+}
+
+/* Responsividade */
 @media (max-width: 768px) {
-  .container {
-    padding: 0 16px;
-  }
-  
-  .card {
-    padding: 16px;
+  .btn {
+    width: 100%;
+    padding: 12px 20px;
   }
 }
 
+@media (max-width: 480px) {
+  .btn {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+}

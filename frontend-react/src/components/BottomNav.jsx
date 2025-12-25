@@ -5,11 +5,11 @@ const BottomNav = () => {
   const location = useLocation();
 
   const navItems = [
-    { path: '/dashboard', icon: '🏠', label: 'Início' },
-    { path: '/apostar', icon: '🎲', label: 'Apostar' },
-    { path: '/minhas-apostas', icon: '📋', label: 'Apostas' },
-    { path: '/carteira', icon: '💰', label: 'Carteira' },
-    { path: '/resultados', icon: '📊', label: 'Resultados' },
+    { path: '/dashboard', icon: '🏠', label: 'MENU', highlight: false },
+    { path: '/resultados', icon: '📊', label: 'RESULTADOS', highlight: false },
+    { path: '/apostar', icon: '🎲', label: 'APOSTAR', highlight: true },
+    { path: '/minhas-apostas', icon: '📋', label: 'APOSTAS', highlight: false },
+    { path: '/carteira', icon: '💰', label: 'CARTEIRA', highlight: false },
   ];
 
   return (
@@ -20,7 +20,7 @@ const BottomNav = () => {
           to={item.path}
           className={`bottom-nav-item ${
             location.pathname === item.path ? 'active' : ''
-          }`}
+          } ${item.highlight ? 'highlight' : ''}`}
         >
           <span className="icon">{item.icon}</span>
           <span className="label">{item.label}</span>

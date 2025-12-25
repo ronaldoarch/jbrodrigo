@@ -55,7 +55,44 @@ const Login = () => {
     <div className="login-page">
       <div className="container">
         <div className="login-card">
-          <h1>{isLogin ? 'Entrar' : 'Criar Conta'}</h1>
+          <div className="tabs">
+            <button
+              type="button"
+              className={`tab ${isLogin ? 'active' : ''}`}
+              onClick={() => {
+                setIsLogin(true);
+                setError('');
+                setFormData({
+                  name: '',
+                  email: '',
+                  password: '',
+                  cpf: '',
+                  phone: '',
+                  referral_code: '',
+                });
+              }}
+            >
+              Entrar
+            </button>
+            <button
+              type="button"
+              className={`tab ${!isLogin ? 'active' : ''}`}
+              onClick={() => {
+                setIsLogin(false);
+                setError('');
+                setFormData({
+                  name: '',
+                  email: '',
+                  password: '',
+                  cpf: '',
+                  phone: '',
+                  referral_code: '',
+                });
+              }}
+            >
+              Criar Conta
+            </button>
+          </div>
 
           {error && <div className="error">{error}</div>}
 
@@ -146,28 +183,11 @@ const Login = () => {
             </button>
           </form>
 
-          <div className="form-footer">
-            <button
-              type="button"
-              onClick={() => {
-                setIsLogin(!isLogin);
-                setError('');
-                setFormData({
-                  name: '',
-                  email: '',
-                  password: '',
-                  cpf: '',
-                  phone: '',
-                  referral_code: '',
-                });
-              }}
-              className="link-button"
-            >
-              {isLogin
-                ? 'Não tem conta? Criar conta'
-                : 'Já tem conta? Fazer login'}
-            </button>
-          </div>
+          {isLogin && (
+            <div className="forgot-password">
+              <Link to="/recuperar-senha">Esqueceu sua senha?</Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
