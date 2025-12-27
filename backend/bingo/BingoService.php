@@ -212,7 +212,13 @@ class BingoService {
     private function debitBet($userId, $amount, $cardId) {
         // Buscar carteira antes do débito para obter o saldo anterior
         $walletBefore = $this->getWallet($userId);
-        $balanceBefore = $walletBefore ? (float)$walletBefore['balance'] : 0.0;
+        if (!$walletBefore) {
+            // Criar carteira se não existir
+            $createWalletStmt = $this->db->prepare("INSERT INTO wallets (user_id) VALUES (?)");
+            $createWalletStmt->execute([$userId]);
+            $walletBefore = $this->getWallet($userId);
+        }
+        $balanceBefore = (float)$walletBefore['balance'];
         
         $stmt = $this->db->prepare("
             UPDATE wallets 
@@ -224,7 +230,10 @@ class BingoService {
         
         // Buscar carteira após o débito para obter o saldo atual e o ID
         $wallet = $this->getWallet($userId);
-        $balanceAfter = $wallet ? (float)$wallet['balance'] : 0.0;
+        if (!$wallet) {
+            throw new Exception("Erro ao buscar carteira após débito");
+        }
+        $balanceAfter = (float)$wallet['balance'];
         
         // Criar transação
         $transStmt = $this->db->prepare("
@@ -253,7 +262,13 @@ class BingoService {
     private function creditPrize($userId, $amount, $cardId) {
         // Buscar carteira antes do crédito para obter o saldo anterior
         $walletBefore = $this->getWallet($userId);
-        $balanceBefore = $walletBefore ? (float)$walletBefore['balance'] : 0.0;
+        if (!$walletBefore) {
+            // Criar carteira se não existir
+            $createWalletStmt = $this->db->prepare("INSERT INTO wallets (user_id) VALUES (?)");
+            $createWalletStmt->execute([$userId]);
+            $walletBefore = $this->getWallet($userId);
+        }
+        $balanceBefore = (float)$walletBefore['balance'];
         
         $stmt = $this->db->prepare("
             UPDATE wallets 
@@ -265,7 +280,10 @@ class BingoService {
         
         // Buscar carteira após o crédito para obter o saldo atual e o ID
         $wallet = $this->getWallet($userId);
-        $balanceAfter = $wallet ? (float)$wallet['balance'] : 0.0;
+        if (!$wallet) {
+            throw new Exception("Erro ao buscar carteira após crédito");
+        }
+        $balanceAfter = (float)$wallet['balance'];
         
         // Criar transação
         $transStmt = $this->db->prepare("
