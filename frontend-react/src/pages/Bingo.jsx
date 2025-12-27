@@ -31,7 +31,9 @@ const Bingo = () => {
   // Inicializar saldo do contexto se disponível
   useEffect(() => {
     if (user?.wallet?.balance !== undefined) {
-      setBalance(parseFloat(user.wallet.balance) || 0);
+      const contextBalance = parseFloat(user.wallet.balance) || 0;
+      setBalance(contextBalance);
+      console.log('Saldo inicializado do contexto:', contextBalance);
     }
   }, [user]);
 
@@ -39,8 +41,10 @@ const Bingo = () => {
     try {
       const response = await api.get('/backend/wallet/balance.php');
       if (response.data.success) {
+        // A API retorna balance diretamente, não como objeto
         const balanceValue = parseFloat(response.data.balance) || 0;
         setBalance(balanceValue);
+        console.log('Saldo carregado:', balanceValue);
         // Atualizar contexto de autenticação também
         await checkAuth();
       }
@@ -48,7 +52,9 @@ const Bingo = () => {
       console.error('Erro ao carregar saldo:', error);
       // Usar saldo do contexto como fallback
       if (user?.wallet?.balance !== undefined) {
-        setBalance(parseFloat(user.wallet.balance) || 0);
+        const fallbackBalance = parseFloat(user.wallet.balance) || 0;
+        setBalance(fallbackBalance);
+        console.log('Saldo do contexto (fallback):', fallbackBalance);
       }
     }
   };
@@ -253,13 +259,13 @@ const Bingo = () => {
                 <button
                   className="btn btn-primary"
                   onClick={createCard}
-                  disabled={loading || betAmount <= 0 || balance < betAmount}
+                  disabled={loading || betAmount <= 0 || (typeof balance === 'number' && balance < betAmount)}
                 >
                   {loading ? 'Processando...' : 'Gerar Cartela'}
                 </button>
-                {balance < betAmount && (
+                {typeof balance === 'number' && balance < betAmount && (
                   <p className="insufficient-balance-warning">
-                    Saldo insuficiente. Saldo atual: R$ {typeof balance === 'number' ? balance.toFixed(2) : parseFloat(balance || 0).toFixed(2)}
+                    Saldo insuficiente. Saldo atual: R$ {balance.toFixed(2)} | Aposta: R$ {betAmount.toFixed(2)}
                   </p>
                 )}
               </div>
