@@ -20,7 +20,8 @@ class BingoValidator {
      */
     public static function checkWin($cardNumbers, $matchedNumbers) {
         // Converter para formato de matriz se necessário
-        if (!is_array($cardNumbers[0]) || !is_array($cardNumbers[0])) {
+        // Se primeiro elemento não é array, então é array unidimensional
+        if (!isset($cardNumbers[0]) || !is_array($cardNumbers[0])) {
             $card = BingoCardGenerator::arrayToCard($cardNumbers);
         } else {
             $card = $cardNumbers;
