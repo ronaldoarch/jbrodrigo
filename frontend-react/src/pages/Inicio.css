@@ -11,7 +11,7 @@
 
 /* Seção de Cotações ao Vivo */
 .live-odds-section {
-  background: #000000;
+  background: transparent;
   padding: 40px 20px;
   margin-bottom: 0;
 }
@@ -35,7 +35,7 @@
 }
 
 .odds-card {
-  background: #000000;
+  background: var(--bg-card);
   border: 2px solid var(--primary-color);
   border-radius: 12px;
   padding: 24px;
@@ -96,7 +96,7 @@
 
 /* Seção de Resultados */
 .results-section {
-  background: #000000;
+  background: transparent;
   padding: 40px 20px;
 }
 
