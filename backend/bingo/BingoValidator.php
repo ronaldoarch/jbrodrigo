@@ -28,30 +28,29 @@ class BingoValidator {
         
         $matchedSet = array_flip($matchedNumbers);
         
-        // Verificar padrões em ordem de prioridade
-        // Primeiro verifica padrões mais simples (linha/coluna)
-        $lineWon = self::checkRows($card, $matchedSet);
-        $columnWon = self::checkColumns($card, $matchedSet);
-        $diagonalPrincipalWon = self::checkDiagonal($card, $matchedSet, 'principal');
-        $diagonalSecundariaWon = self::checkDiagonal($card, $matchedSet, 'secundaria');
-        $fullCardWon = self::checkFullCard($card, $matchedSet);
+        // Verificar padrões em ordem de prioridade (maior prêmio primeiro)
+        // 1. Cartela cheia (maior prêmio)
+        if (self::checkFullCard($card, $matchedSet)) {
+            return ['won' => true, 'pattern' => 'cheia'];
+        }
         
-        $patterns = [
-            'cheia' => $fullCardWon,
-            'diagonal_principal' => $diagonalPrincipalWon,
-            'diagonal_secundaria' => $diagonalSecundariaWon,
-            'diagonal' => $diagonalPrincipalWon || $diagonalSecundariaWon,
-            'linha' => $lineWon,
-            'coluna' => $columnWon
-        ];
+        // 2. Diagonais (próximo maior prêmio)
+        if (self::checkDiagonal($card, $matchedSet, 'principal')) {
+            return ['won' => true, 'pattern' => 'diagonal_principal'];
+        }
         
-        foreach ($patterns as $pattern => $won) {
-            if ($won) {
-                return [
-                    'won' => true,
-                    'pattern' => $pattern
-                ];
-            }
+        if (self::checkDiagonal($card, $matchedSet, 'secundaria')) {
+            return ['won' => true, 'pattern' => 'diagonal_secundaria'];
+        }
+        
+        // 3. Linhas
+        if (self::checkRows($card, $matchedSet)) {
+            return ['won' => true, 'pattern' => 'linha'];
+        }
+        
+        // 4. Colunas
+        if (self::checkColumns($card, $matchedSet)) {
+            return ['won' => true, 'pattern' => 'coluna'];
         }
         
         return [
