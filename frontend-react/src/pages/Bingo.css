@@ -316,6 +316,14 @@
   text-align: center;
 }
 
+.insufficient-balance-warning {
+  color: #ff4444;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
 @media (max-width: 768px) {
   .bingo-card {
     padding: 12px;

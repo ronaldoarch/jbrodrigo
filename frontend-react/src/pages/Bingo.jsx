@@ -6,11 +6,12 @@ import './Bingo.css';
 
 const Bingo = () => {
   const [activeTab, setActiveTab] = useState('bingo'); // 'bingo' ou 'keno'
-  const { user } = useAuth();
+  const { user, checkAuth } = useAuth();
   const [card, setCard] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [betAmount, setBetAmount] = useState(1.00);
+  const [balance, setBalance] = useState(0);
   const [revealedNumbers, setRevealedNumbers] = useState([]);
   const [currentDrawIndex, setCurrentDrawIndex] = useState(0);
   const [isRevealing, setIsRevealing] = useState(false);
@@ -20,8 +21,20 @@ const Bingo = () => {
   useEffect(() => {
     if (activeTab === 'bingo') {
       loadHistory();
+      loadBalance();
     }
   }, [activeTab]);
+
+  const loadBalance = async () => {
+    try {
+      const response = await api.get('/backend/wallet/balance.php');
+      if (response.data.success) {
+        setBalance(response.data.balance || 0);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar saldo:', error);
+    }
+  };
 
   const loadHistory = async () => {
     try {
@@ -51,6 +64,8 @@ const Bingo = () => {
         setCard(newCard);
         startRevealAnimation(newCard);
         loadHistory(); // Atualizar histórico
+        loadBalance(); // Atualizar saldo
+        checkAuth(); // Atualizar contexto de autenticação
       } else {
         setError(response.data.error || 'Erro ao criar cartela');
       }
@@ -218,10 +233,15 @@ const Bingo = () => {
                 <button
                   className="btn btn-primary"
                   onClick={createCard}
-                  disabled={loading || betAmount <= 0}
+                  disabled={loading || betAmount <= 0 || balance < betAmount}
                 >
                   {loading ? 'Processando...' : 'Gerar Cartela'}
                 </button>
+                {balance < betAmount && (
+                  <p className="insufficient-balance-warning">
+                    Saldo insuficiente. Saldo atual: R$ {balance.toFixed(2)}
+                  </p>
+                )}
               </div>
             )}
 
