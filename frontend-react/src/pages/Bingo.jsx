@@ -25,14 +25,28 @@ const Bingo = () => {
     }
   }, [activeTab]);
 
+  // Inicializar saldo do contexto se disponível
+  useEffect(() => {
+    if (user?.wallet?.balance !== undefined) {
+      setBalance(parseFloat(user.wallet.balance) || 0);
+    }
+  }, [user]);
+
   const loadBalance = async () => {
     try {
       const response = await api.get('/backend/wallet/balance.php');
       if (response.data.success) {
-        setBalance(response.data.balance || 0);
+        const balanceValue = parseFloat(response.data.balance) || 0;
+        setBalance(balanceValue);
+        // Atualizar contexto de autenticação também
+        await checkAuth();
       }
     } catch (error) {
       console.error('Erro ao carregar saldo:', error);
+      // Usar saldo do contexto como fallback
+      if (user?.wallet?.balance !== undefined) {
+        setBalance(parseFloat(user.wallet.balance) || 0);
+      }
     }
   };
 

@@ -9,7 +9,15 @@ require_once __DIR__ . '/../utils/auth-helper.php';
 
 header('Content-Type: application/json');
 
-$userId = requireAuth();
+$user = getCurrentUser();
+
+if (!$user) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'error' => 'Não autenticado']);
+    exit;
+}
+
+$userId = $user['id'];
 
 try {
     $db = getDB();
