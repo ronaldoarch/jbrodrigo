@@ -11,19 +11,21 @@ echo "🔧 Adicionando colunas faltantes na tabela wallets...\n\n";
 try {
     $db = getDB();
     
-    // Lista de colunas a adicionar (com verificação)
+    // Ordem das colunas a adicionar (devem ser adicionadas nesta ordem devido ao AFTER)
     $columns = [
-        'locked_balance' => "DECIMAL(12,2) DEFAULT 0.00 AFTER `bonus_balance`",
-        'total_deposited' => "DECIMAL(12,2) DEFAULT 0.00 AFTER `locked_balance`",
-        'total_withdrawn' => "DECIMAL(12,2) DEFAULT 0.00 AFTER `total_deposited`",
-        'total_wagered' => "DECIMAL(12,2) DEFAULT 0.00 AFTER `total_withdrawn`",
-        'total_won' => "DECIMAL(12,2) DEFAULT 0.00 AFTER `total_wagered`",
+        ['name' => 'locked_balance', 'def' => "DECIMAL(12,2) DEFAULT 0.00", 'after' => 'bonus_balance'],
+        ['name' => 'total_deposited', 'def' => "DECIMAL(12,2) DEFAULT 0.00", 'after' => 'locked_balance'],
+        ['name' => 'total_withdrawn', 'def' => "DECIMAL(12,2) DEFAULT 0.00", 'after' => 'total_deposited'],
+        ['name' => 'total_wagered', 'def' => "DECIMAL(12,2) DEFAULT 0.00", 'after' => 'total_withdrawn'],
+        ['name' => 'total_won', 'def' => "DECIMAL(12,2) DEFAULT 0.00", 'after' => 'total_wagered'],
     ];
     
     $added = 0;
     $skipped = 0;
     
-    foreach ($columns as $columnName => $columnDef) {
+    foreach ($columns as $column) {
+        $columnName = $column['name'];
+        
         // Verificar se a coluna já existe
         $checkStmt = $db->prepare("
             SELECT COUNT(*) as count 
@@ -43,13 +45,20 @@ try {
         
         // Adicionar coluna
         try {
-            $alterSql = "ALTER TABLE `wallets` ADD COLUMN `{$columnName}` {$columnDef}";
+            $afterClause = $column['after'] ? " AFTER `{$column['after']}`" : "";
+            $alterSql = "ALTER TABLE `wallets` ADD COLUMN `{$columnName}` {$column['def']}{$afterClause}";
             echo "➕ Adicionando coluna '$columnName'...\n";
             $db->exec($alterSql);
             echo "✅ Coluna '$columnName' adicionada com sucesso!\n\n";
             $added++;
         } catch (PDOException $e) {
-            echo "❌ Erro ao adicionar coluna '$columnName': " . $e->getMessage() . "\n\n";
+            // Se o erro for porque a coluna já existe (1060), considerar como sucesso
+            if (strpos($e->getMessage(), 'Duplicate column name') !== false || $e->getCode() == 1060) {
+                echo "⏭️  Coluna '$columnName' já existe (duplicada detectada)\n\n";
+                $skipped++;
+            } else {
+                echo "❌ Erro ao adicionar coluna '$columnName': " . $e->getMessage() . "\n\n";
+            }
         }
     }
     
