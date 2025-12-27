@@ -217,7 +217,7 @@ class BingoService {
         $transStmt = $this->db->prepare("
             INSERT INTO wallet_transactions
             (wallet_id, user_id, type, amount, balance_before, balance_after, description, reference_type, reference_id, status)
-            VALUES (?, ?, 'bet', ?, ?, ?, ?, 'bingo_card', ?, 'completed')
+            VALUES (?, ?, 'bet', ?, ?, ?, ?, 'bet', ?, 'completed')
         ");
         $transStmt->execute([
             $wallet['id'],
@@ -254,7 +254,7 @@ class BingoService {
         $transStmt = $this->db->prepare("
             INSERT INTO wallet_transactions
             (wallet_id, user_id, type, amount, balance_before, balance_after, description, reference_type, reference_id, status)
-            VALUES (?, ?, 'prize', ?, ?, ?, ?, 'bingo_card', ?, 'completed')
+            VALUES (?, ?, 'prize', ?, ?, ?, ?, 'bet', ?, 'completed')
         ");
         $transStmt->execute([
             $wallet['id'],

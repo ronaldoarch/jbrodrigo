@@ -115,6 +115,14 @@ function App() {
               <Route path="resultados" element={<Resultados />} />
               <Route path="resultados.php" element={<Resultados />} />
               <Route
+                path="bingo"
+                element={
+                  <PrivateRoute>
+                    <Bingo />
+                  </PrivateRoute>
+                }
+              />
+              <Route
                 path="admin"
                 element={
                   <PrivateRoute requireAdmin>
