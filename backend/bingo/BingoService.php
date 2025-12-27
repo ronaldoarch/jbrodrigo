@@ -59,8 +59,8 @@ class BingoService {
             $updateGameStmt->execute([$seed, json_encode($drawSequence), $gameId]);
             
             // Processar resultado (verificar se ganhou)
-            $drawResult = BingoDraw::drawUntilWin($cardNumbers, $newSeed);
-            $matchedNumbers = $drawResult['matched'];
+            // Pegar todos os números que foram sorteados e verificar quais acertaram
+            $matchedNumbers = BingoDraw::getMatchedNumbers($cardNumbers, $drawSequence, count($drawSequence));
             
             $validation = BingoValidator::checkWin($card, $matchedNumbers);
             
