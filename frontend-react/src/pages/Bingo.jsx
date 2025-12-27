@@ -25,6 +25,7 @@ const Bingo = () => {
       loadHistory();
       loadBalance();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
 
   // Inicializar saldo do contexto se disponível
@@ -126,6 +127,27 @@ const Bingo = () => {
     return revealedNumbers.includes(number);
   };
 
+  const arrayToMatrix = (array, columns) => {
+    if (!array || !Array.isArray(array)) return [];
+    const matrix = [];
+    for (let i = 0; i < array.length; i += columns) {
+      matrix.push(array.slice(i, i + columns));
+    }
+    return matrix;
+  };
+
+  const getPatternName = (pattern) => {
+    if (!pattern) return '';
+    const patterns = {
+      'linha': 'Linha',
+      'coluna': 'Coluna',
+      'diagonal_principal': 'Diagonal Principal',
+      'diagonal_secundaria': 'Diagonal Secundária',
+      'cheia': 'Cartela Cheia'
+    };
+    return patterns[pattern] || pattern;
+  };
+
   const renderCard = () => {
     if (!card || !card.card_numbers) return null;
 
@@ -170,24 +192,6 @@ const Bingo = () => {
     );
   };
 
-  const getPatternName = (pattern) => {
-    const patterns = {
-      'linha': 'Linha',
-      'coluna': 'Coluna',
-      'diagonal_principal': 'Diagonal Principal',
-      'diagonal_secundaria': 'Diagonal Secundária',
-      'cheia': 'Cartela Cheia'
-    };
-    return patterns[pattern] || pattern;
-  };
-
-  const arrayToMatrix = (array, columns) => {
-    const matrix = [];
-    for (let i = 0; i < array.length; i += columns) {
-      matrix.push(array.slice(i, i + columns));
-    }
-    return matrix;
-  };
 
   const resetGame = () => {
     setCard(null);
