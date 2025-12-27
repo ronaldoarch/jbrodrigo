@@ -12,6 +12,7 @@ import MinhasApostas from './pages/MinhasApostas';
 import Carteira from './pages/Carteira';
 import Resultados from './pages/Resultados';
 import Bingo from './pages/Bingo';
+import Keno from './pages/Keno';
 import Admin from './pages/Admin';
 
 function App() {
@@ -119,6 +120,14 @@ function App() {
                 element={
                   <PrivateRoute>
                     <Bingo />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="keno"
+                element={
+                  <PrivateRoute>
+                    <Keno />
                   </PrivateRoute>
                 }
               />

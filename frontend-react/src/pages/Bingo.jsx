@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
+import Keno from './Keno';
 import './Bingo.css';
 
 const Bingo = () => {
+  const [activeTab, setActiveTab] = useState('bingo'); // 'bingo' ou 'keno'
   const { user } = useAuth();
   const [card, setCard] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -16,8 +18,10 @@ const Bingo = () => {
   const [showHistory, setShowHistory] = useState(false);
 
   useEffect(() => {
-    loadHistory();
-  }, []);
+    if (activeTab === 'bingo') {
+      loadHistory();
+    }
+  }, [activeTab]);
 
   const loadHistory = async () => {
     try {
@@ -98,159 +102,180 @@ const Bingo = () => {
     const cardMatrix = arrayToMatrix(cardNumbers, 5);
 
     return (
-      <div className="bingo-card-container">
+      <div className="bingo-card">
         <div className="bingo-card-header">
           <h3>Cartela de Bingo</h3>
-          <div className="card-info">
-            <span>Status: {card.result === 'win' ? '🎉 Ganhou!' : '❌ Perdeu'}</span>
-            {card.win_pattern && (
-              <span className="win-pattern">
-                Padrão: {getPatternName(card.win_pattern)}
-              </span>
-            )}
-          </div>
+          {card.prize_amount > 0 && (
+            <div className="prize-badge">
+              Prêmio: R$ {parseFloat(card.prize_amount).toFixed(2)}
+            </div>
+          )}
         </div>
-        
-        <div className="bingo-card">
-          <div className="bingo-header">
-            <div className="bingo-letter">B</div>
-            <div className="bingo-letter">I</div>
-            <div className="bingo-letter">N</div>
-            <div className="bingo-letter">G</div>
-            <div className="bingo-letter">O</div>
-          </div>
-          
+        <div className="bingo-grid">
           {cardMatrix.map((row, rowIndex) => (
             <div key={rowIndex} className="bingo-row">
               {row.map((number, colIndex) => {
-                const matched = isNumberMatched(number);
+                const isMatched = isNumberMatched(number);
+                const isCenter = rowIndex === 2 && colIndex === 2;
+                
                 return (
                   <div
                     key={`${rowIndex}-${colIndex}`}
-                    className={`bingo-cell ${matched ? 'matched' : ''}`}
+                    className={`bingo-cell ${isMatched ? 'matched' : ''} ${isCenter ? 'center' : ''}`}
                   >
-                    {number}
+                    {isCenter ? 'FREE' : number}
                   </div>
                 );
               })}
             </div>
           ))}
         </div>
-
-        {card.result === 'win' && card.prize_amount > 0 && (
-          <div className="prize-info">
-            <h4>🎉 Parabéns! Você ganhou!</h4>
-            <p className="prize-amount">
-              Prêmio: R$ {card.prize_amount.toFixed(2).replace('.', ',')}
-            </p>
+        {card.win_pattern && (
+          <div className="win-pattern">
+            Padrão vencedor: {getPatternName(card.win_pattern)}
           </div>
         )}
-
-        <div className="draw-progress">
-          <p>
-            Números sorteados: {currentDrawIndex} / {card.numbers_drawn?.length || 0}
-          </p>
-        </div>
       </div>
     );
   };
 
-  const arrayToMatrix = (array, cols) => {
-    const matrix = [];
-    for (let i = 0; i < array.length; i += cols) {
-      matrix.push(array.slice(i, i + cols));
-    }
-    return matrix;
-  };
-
   const getPatternName = (pattern) => {
-    const names = {
+    const patterns = {
       'linha': 'Linha',
       'coluna': 'Coluna',
       'diagonal_principal': 'Diagonal Principal',
       'diagonal_secundaria': 'Diagonal Secundária',
-      'diagonal': 'Diagonal',
       'cheia': 'Cartela Cheia'
     };
-    return names[pattern] || pattern;
+    return patterns[pattern] || pattern;
+  };
+
+  const arrayToMatrix = (array, columns) => {
+    const matrix = [];
+    for (let i = 0; i < array.length; i += columns) {
+      matrix.push(array.slice(i, i + columns));
+    }
+    return matrix;
+  };
+
+  const resetGame = () => {
+    setCard(null);
+    setRevealedNumbers([]);
+    setCurrentDrawIndex(0);
+    setIsRevealing(false);
+    setError('');
   };
 
   return (
     <div className="bingo-page">
       <div className="container">
-        <h1>Bingo Automático</h1>
-
-        {error && <div className="error-message">{error}</div>}
-
-        <div className="bingo-controls">
-          <div className="bet-control">
-            <label>Valor da Aposta (R$)</label>
-            <input
-              type="number"
-              step="0.01"
-              min="1.00"
-              value={betAmount}
-              onChange={(e) => setBetAmount(parseFloat(e.target.value) || 1.00)}
-              disabled={loading || isRevealing}
-            />
-          </div>
-
+        {/* Tabs */}
+        <div className="game-tabs">
           <button
-            className="btn btn-primary btn-create-card"
-            onClick={createCard}
-            disabled={loading || isRevealing}
+            className={`tab-button ${activeTab === 'bingo' ? 'active' : ''}`}
+            onClick={() => setActiveTab('bingo')}
           >
-            {loading ? 'Criando...' : 'Nova Cartela'}
+            🎯 Bingo
           </button>
-
           <button
-            className="btn btn-secondary"
-            onClick={() => setShowHistory(!showHistory)}
+            className={`tab-button ${activeTab === 'keno' ? 'active' : ''}`}
+            onClick={() => setActiveTab('keno')}
           >
-            {showHistory ? 'Ocultar' : 'Ver'} Histórico
+            🎰 Keno
           </button>
         </div>
 
-        {card && renderCard()}
+        {/* Conteúdo baseado na tab ativa */}
+        {activeTab === 'bingo' ? (
+          <>
+            <div className="bingo-header">
+              <h1>🎯 Bingo Automático</h1>
+              <p className="subtitle">Escolha o valor e jogue!</p>
+            </div>
 
-        {showHistory && (
-          <div className="bingo-history">
-            <h2>Histórico de Partidas</h2>
-            {history.length === 0 ? (
-              <p>Nenhuma partida ainda</p>
-            ) : (
-              <div className="history-list">
-                {history.map((cardItem) => (
-                  <div
-                    key={cardItem.id}
-                    className={`history-item ${cardItem.result === 'win' ? 'won' : 'lost'}`}
-                  >
-                    <div className="history-info">
-                      <span className="history-date">
-                        {new Date(cardItem.created_at).toLocaleString('pt-BR')}
-                      </span>
-                      <span className="history-result">
-                        {cardItem.result === 'win' ? '🎉 Ganhou' : '❌ Perdeu'}
-                      </span>
-                      {cardItem.win_pattern && (
-                        <span className="history-pattern">
-                          {getPatternName(cardItem.win_pattern)}
-                        </span>
-                      )}
-                    </div>
-                    <div className="history-amounts">
-                      <span>Aposta: R$ {cardItem.bet_amount.toFixed(2).replace('.', ',')}</span>
-                      {cardItem.prize_amount > 0 && (
-                        <span className="prize">
-                          Prêmio: R$ {cardItem.prize_amount.toFixed(2).replace('.', ',')}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                ))}
+            {error && (
+              <div className="alert alert-error">
+                {error}
               </div>
             )}
-          </div>
+
+            {!card && (
+              <div className="bingo-setup">
+                <div className="bet-control">
+                  <label>Valor da Aposta:</label>
+                  <div className="bet-input">
+                    <span>R$</span>
+                    <input
+                      type="number"
+                      min="0.01"
+                      step="0.01"
+                      value={betAmount}
+                      onChange={(e) => setBetAmount(parseFloat(e.target.value) || 0)}
+                      disabled={loading}
+                    />
+                  </div>
+                </div>
+                <button
+                  className="btn btn-primary"
+                  onClick={createCard}
+                  disabled={loading || betAmount <= 0}
+                >
+                  {loading ? 'Processando...' : 'Gerar Cartela'}
+                </button>
+              </div>
+            )}
+
+            {card && (
+              <>
+                {renderCard()}
+                <div className="bingo-controls">
+                  <button className="btn btn-primary" onClick={resetGame}>
+                    Novo Jogo
+                  </button>
+                </div>
+              </>
+            )}
+
+            <div className="bingo-history-section">
+              <button
+                className="btn btn-text"
+                onClick={() => setShowHistory(!showHistory)}
+              >
+                {showHistory ? 'Ocultar' : 'Mostrar'} Histórico
+              </button>
+
+              {showHistory && (
+                <div className="bingo-history">
+                  {history.length === 0 ? (
+                    <p className="no-history">Nenhuma cartela encontrada</p>
+                  ) : (
+                    history.map((cardItem) => (
+                      <div key={cardItem.id} className="history-item">
+                        <div className="history-header">
+                          <span className="history-date">
+                            {new Date(cardItem.created_at).toLocaleDateString('pt-BR')}
+                          </span>
+                          {cardItem.prize_amount > 0 && (
+                            <span className="history-prize">
+                              +R$ {parseFloat(cardItem.prize_amount).toFixed(2)}
+                            </span>
+                          )}
+                        </div>
+                        <div className="history-details">
+                          <span>
+                            {cardItem.result === 'win' ? '✅ Ganhou' : '❌ Perdeu'}
+                            {cardItem.win_pattern && ` - ${getPatternName(cardItem.win_pattern)}`}
+                          </span>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+          </>
+        ) : (
+          <Keno />
         )}
       </div>
     </div>
@@ -258,4 +283,3 @@ const Bingo = () => {
 };
 
 export default Bingo;
-

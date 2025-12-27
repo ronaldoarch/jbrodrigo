@@ -3,6 +3,41 @@
   min-height: calc(100vh - 200px);
 }
 
+/* Tabs */
+.game-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  background: var(--bg-card);
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.tab-button {
+  flex: 1;
+  padding: 12px 24px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-button:hover {
+  background: rgba(234, 170, 1, 0.1);
+  color: var(--primary-color);
+}
+
+.tab-button.active {
+  background: var(--primary-color);
+  color: var(--bg-dark);
+  box-shadow: var(--shadow-sm);
+}
+
 .bingo-page h1 {
   font-size: 36px;
   margin-bottom: 32px;
