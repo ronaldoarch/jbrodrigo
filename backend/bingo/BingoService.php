@@ -39,27 +39,24 @@ class BingoService {
             $card = BingoCardGenerator::generateCard();
             $cardNumbers = BingoCardGenerator::cardToArray($card);
             
-            // Gerar seed e sequência de sorteio
-            $timestamp = time();
-            $seed = BingoDraw::generateSeed(0, $timestamp); // ID será atualizado depois
-            $drawSequence = BingoDraw::generateDrawSequence($seed);
-            
-            // Criar jogo de bingo
+            // Criar jogo primeiro (para ter o ID)
             $gameStmt = $this->db->prepare("
                 INSERT INTO bingo_games (seed, numbers_drawn, status)
-                VALUES (?, ?, 'active')
+                VALUES ('', '', 'active')
             ");
-            $gameStmt->execute([$seed, json_encode($drawSequence)]);
+            $gameStmt->execute();
             $gameId = $this->db->lastInsertId();
             
-            // Atualizar seed com o ID do jogo (para garantir unicidade)
-            $newSeed = BingoDraw::generateSeed($gameId, $timestamp);
-            $drawSequence = BingoDraw::generateDrawSequence($newSeed);
+            // Gerar seed usando o game_id
+            $timestamp = time();
+            $seed = BingoDraw::generateSeed($gameId, $timestamp);
+            $drawSequence = BingoDraw::generateDrawSequence($seed);
             
+            // Atualizar jogo com seed e sequência
             $updateGameStmt = $this->db->prepare("
                 UPDATE bingo_games SET seed = ?, numbers_drawn = ? WHERE id = ?
             ");
-            $updateGameStmt->execute([$newSeed, json_encode($drawSequence), $gameId]);
+            $updateGameStmt->execute([$seed, json_encode($drawSequence), $gameId]);
             
             // Processar resultado (verificar se ganhou)
             $drawResult = BingoDraw::drawUntilWin($cardNumbers, $newSeed);
