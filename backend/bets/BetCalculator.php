@@ -97,9 +97,17 @@ class BetCalculator {
      */
     public static function getMultiplier($modality, $positions = null, $gameType = null) {
         // Tentar usar OddsManager se disponível
+        if (!class_exists('OddsManager')) {
+            @require_once __DIR__ . '/OddsManager.php';
+        }
+        
         if (class_exists('OddsManager')) {
-            require_once __DIR__ . '/OddsManager.php';
-            return OddsManager::getMultiplier($modality, $positions, $gameType);
+            try {
+                return OddsManager::getMultiplier($modality, $positions, $gameType);
+            } catch (Exception $e) {
+                error_log("Erro ao buscar multiplicador do banco: " . $e->getMessage());
+                // Continuar com fallback
+            }
         }
         
         // Fallback para valores padrão (hardcoded)
