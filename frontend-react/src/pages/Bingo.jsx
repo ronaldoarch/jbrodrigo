@@ -13,7 +13,8 @@ const Bingo = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [betAmount, setBetAmount] = useState(1.00);
-  const [balance, setBalance] = useState(0);
+  const [balance, setBalance] = useState(null); // null indica que ainda não carregou
+  const [balanceLoading, setBalanceLoading] = useState(true);
   const [revealedNumbers, setRevealedNumbers] = useState([]);
   const [currentDrawIndex, setCurrentDrawIndex] = useState(0);
   const [isRevealing, setIsRevealing] = useState(false);
@@ -30,31 +31,34 @@ const Bingo = () => {
 
   // Inicializar saldo do contexto se disponível
   useEffect(() => {
-    if (user?.wallet?.balance !== undefined) {
+    if (user?.wallet?.balance !== undefined && balance === null) {
       const contextBalance = parseFloat(user.wallet.balance) || 0;
       setBalance(contextBalance);
-      console.log('Saldo inicializado do contexto:', contextBalance);
+      setBalanceLoading(false);
     }
-  }, [user]);
+  }, [user, balance]);
 
   const loadBalance = async () => {
+    setBalanceLoading(true);
     try {
       const response = await api.get('/backend/wallet/balance.php');
       if (response.data.success) {
         // A API retorna balance diretamente, não como objeto
         const balanceValue = parseFloat(response.data.balance) || 0;
         setBalance(balanceValue);
-        console.log('Saldo carregado:', balanceValue);
+        setBalanceLoading(false);
         // Atualizar contexto de autenticação também
         await checkAuth();
       }
     } catch (error) {
       console.error('Erro ao carregar saldo:', error);
+      setBalanceLoading(false);
       // Usar saldo do contexto como fallback
       if (user?.wallet?.balance !== undefined) {
         const fallbackBalance = parseFloat(user.wallet.balance) || 0;
         setBalance(fallbackBalance);
-        console.log('Saldo do contexto (fallback):', fallbackBalance);
+      } else {
+        setBalance(0);
       }
     }
   };
@@ -259,11 +263,11 @@ const Bingo = () => {
                 <button
                   className="btn btn-primary"
                   onClick={createCard}
-                  disabled={loading || betAmount <= 0 || (typeof balance === 'number' && balance < betAmount)}
+                  disabled={loading || balanceLoading || betAmount <= 0 || (balance !== null && typeof balance === 'number' && balance < betAmount)}
                 >
                   {loading ? 'Processando...' : 'Gerar Cartela'}
                 </button>
-                {typeof balance === 'number' && balance < betAmount && (
+                {!balanceLoading && balance !== null && typeof balance === 'number' && balance < betAmount && (
                   <p className="insufficient-balance-warning">
                     Saldo insuficiente. Saldo atual: R$ {balance.toFixed(2)} | Aposta: R$ {betAmount.toFixed(2)}
                   </p>
