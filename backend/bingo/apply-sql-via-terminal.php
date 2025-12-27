@@ -15,10 +15,11 @@ echo "🎲 Aplicando estrutura do módulo Bingo...\n\n";
 try {
     $db = getDB();
     
-    // SQL das tabelas
-    $sql = "
-    -- Tabela de Jogos de Bingo
-    CREATE TABLE IF NOT EXISTS `bingo_games` (
+    $executed = 0;
+    $errors = 0;
+    
+    // SQL da tabela bingo_games (PRIMEIRO - não depende de outras)
+    $sql_bingo_games = "CREATE TABLE IF NOT EXISTS `bingo_games` (
         `id` INT AUTO_INCREMENT PRIMARY KEY,
         `seed` VARCHAR(255) NOT NULL,
         `numbers_drawn` TEXT NOT NULL,
@@ -27,9 +28,32 @@ try {
         `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         INDEX `idx_status` (`status`),
         INDEX `idx_created_at` (`created_at`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-    CREATE TABLE IF NOT EXISTS `bingo_cards` (
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+    
+    // Criar bingo_games primeiro
+    echo "📝 Criando tabela bingo_games...\n";
+    try {
+        $db->exec($sql_bingo_games);
+        $executed++;
+        echo "✅ Tabela bingo_games criada com sucesso\n\n";
+    } catch (PDOException $e) {
+        if (strpos($e->getMessage(), 'already exists') !== false || strpos($e->getMessage(), 'Duplicate table') !== false) {
+            echo "⚠️  Tabela bingo_games já existe (continuando...)\n\n";
+        } else {
+            $errors++;
+            echo "❌ Erro ao criar bingo_games: " . $e->getMessage() . "\n\n";
+            throw $e; // Parar execução se não conseguir criar bingo_games
+        }
+    }
+    
+    // Verificar se bingo_games existe antes de criar bingo_cards
+    $stmt = $db->query("SHOW TABLES LIKE 'bingo_games'");
+    if ($stmt->rowCount() == 0) {
+        throw new Exception("Tabela bingo_games não foi criada. Não é possível criar bingo_cards.");
+    }
+    
+    // SQL da tabela bingo_cards (SEGUNDO - depende de bingo_games e users)
+    $sql_bingo_cards = "CREATE TABLE IF NOT EXISTS `bingo_cards` (
         `id` INT AUTO_INCREMENT PRIMARY KEY,
         `user_id` INT NOT NULL,
         `game_id` INT NOT NULL,
@@ -47,36 +71,21 @@ try {
         INDEX `idx_created_at` (`created_at`),
         FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
         FOREIGN KEY (`game_id`) REFERENCES `bingo_games`(`id`) ON DELETE CASCADE
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-    ";
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
     
-    // Separar comandos SQL
-    $statements = array_filter(
-        array_map('trim', explode(';', $sql)),
-        function($stmt) {
-            return !empty($stmt) && !preg_match('/^\s*--/', $stmt);
-        }
-    );
-    
-    $executed = 0;
-    $errors = 0;
-    
-    foreach ($statements as $statement) {
-        $statement = trim($statement);
-        if (empty($statement)) continue;
-        
-        try {
-            $db->exec($statement);
-            $executed++;
-            echo "✅ Comando executado com sucesso\n";
-        } catch (PDOException $e) {
-            // Ignorar erros de "table already exists"
-            if (strpos($e->getMessage(), 'already exists') !== false) {
-                echo "⚠️  Tabela já existe (ignorando)\n";
-            } else {
-                $errors++;
-                echo "❌ Erro: " . $e->getMessage() . "\n";
-            }
+    // Criar bingo_cards depois
+    echo "📝 Criando tabela bingo_cards...\n";
+    try {
+        $db->exec($sql_bingo_cards);
+        $executed++;
+        echo "✅ Tabela bingo_cards criada com sucesso\n\n";
+    } catch (PDOException $e) {
+        if (strpos($e->getMessage(), 'already exists') !== false || strpos($e->getMessage(), 'Duplicate table') !== false) {
+            echo "⚠️  Tabela bingo_cards já existe (continuando...)\n\n";
+        } else {
+            $errors++;
+            echo "❌ Erro ao criar bingo_cards: " . $e->getMessage() . "\n";
+            throw $e;
         }
     }
     
