@@ -33,7 +33,19 @@ try {
     $stmt->execute([$email]);
     $user = $stmt->fetch();
     
-    if (!$user || !password_verify($password, $user['password'])) {
+    if (!$user) {
+        error_log("Login falhou: Usuário não encontrado - Email: " . $email);
+        http_response_code(401);
+        echo json_encode(['success' => false, 'error' => 'Credenciais inválidas']);
+        exit;
+    }
+    
+    // Log para debug (remover em produção)
+    error_log("Login tentativa - Email: " . $email . " - Hash no banco existe: " . (!empty($user['password']) ? 'sim' : 'não'));
+    
+    // Verificar senha
+    if (empty($user['password']) || !password_verify($password, $user['password'])) {
+        error_log("Login falhou: Senha incorreta ou hash inválido - Email: " . $email);
         http_response_code(401);
         echo json_encode(['success' => false, 'error' => 'Credenciais inválidas']);
         exit;
