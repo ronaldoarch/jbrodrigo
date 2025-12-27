@@ -18,8 +18,20 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 try {
-    // Verificar autenticação
-    $user = requireAuth();
+    // Verificar autenticação (retorna o user_id diretamente)
+    $userId = requireAuth();
+    
+    // Buscar dados completos do usuário para verificar se é admin
+    $db = getDB();
+    $userStmt = $db->prepare("SELECT id, is_admin FROM users WHERE id = ?");
+    $userStmt->execute([$userId]);
+    $user = $userStmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$user) {
+        http_response_code(401);
+        echo json_encode(['success' => false, 'error' => 'Usuário não encontrado']);
+        exit;
+    }
     
     // Obter ID da cartela
     $cardId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
@@ -41,7 +53,7 @@ try {
     }
     
     // Verificar se cartela pertence ao usuário
-    if ($card['user_id'] != $user['id'] && $user['is_admin'] != 1) {
+    if ($card['user_id'] != $userId && !$user['is_admin']) {
         http_response_code(403);
         echo json_encode(['success' => false, 'error' => 'Acesso negado']);
         exit;
