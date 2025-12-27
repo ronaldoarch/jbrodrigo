@@ -77,6 +77,12 @@ const Layout = () => {
                     >
                       Carteira
                     </Link>
+                    <Link 
+                      to="/bingo" 
+                      className={isActive('/bingo') ? 'active' : ''}
+                    >
+                      Bingo
+                    </Link>
                     {user.is_admin && (
                       <Link 
                         to="/admin" 

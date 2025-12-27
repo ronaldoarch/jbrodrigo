@@ -11,6 +11,7 @@ import ConfirmarAposta from './pages/ConfirmarAposta';
 import MinhasApostas from './pages/MinhasApostas';
 import Carteira from './pages/Carteira';
 import Resultados from './pages/Resultados';
+import Bingo from './pages/Bingo';
 import Admin from './pages/Admin';
 
 function App() {

@@ -1,0 +1,313 @@
+.bingo-page {
+  padding: 24px 0;
+  min-height: calc(100vh - 200px);
+}
+
+.bingo-page h1 {
+  font-size: 36px;
+  margin-bottom: 32px;
+  color: var(--primary-color);
+  font-weight: 700;
+  text-align: center;
+}
+
+.bingo-controls {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.bet-control {
+  flex: 1;
+  min-width: 200px;
+}
+
+.bet-control label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.bet-control input {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.bet-control input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(234, 170, 1, 0.1);
+}
+
+.btn-create-card {
+  padding: 12px 32px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.bingo-card-container {
+  max-width: 600px;
+  margin: 0 auto 32px;
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.bingo-card-header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.bingo-card-header h3 {
+  font-size: 24px;
+  color: var(--primary-color);
+  margin-bottom: 12px;
+}
+
+.card-info {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.win-pattern {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.bingo-card {
+  background: white;
+  border: 3px solid var(--primary-color);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.bingo-header {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.bingo-letter {
+  background: var(--primary-color);
+  color: var(--bg-dark);
+  font-weight: 700;
+  font-size: 20px;
+  padding: 12px;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.bingo-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.bingo-cell {
+  background: #f0f0f0;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  transition: all 0.3s;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bingo-cell.matched {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-dark);
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(234, 170, 1, 0.3);
+  animation: matchPulse 0.5s ease-out;
+}
+
+@keyframes matchPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1.05);
+  }
+}
+
+.prize-info {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  color: var(--bg-dark);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.prize-info h4 {
+  margin: 0 0 12px 0;
+  font-size: 24px;
+}
+
+.prize-amount {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.draw-progress {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+  padding: 12px;
+  background: var(--bg-darker);
+  border-radius: 8px;
+}
+
+.bingo-history {
+  margin-top: 48px;
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.bingo-history h2 {
+  font-size: 24px;
+  color: var(--primary-color);
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.history-item {
+  background: var(--bg-darker);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.3s;
+}
+
+.history-item.won {
+  border-color: var(--primary-color);
+  background: rgba(234, 170, 1, 0.1);
+}
+
+.history-item.lost {
+  border-color: #666;
+}
+
+.history-info {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.history-date {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.history-result {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.history-item.won .history-result {
+  color: var(--primary-color);
+}
+
+.history-item.lost .history-result {
+  color: #999;
+}
+
+.history-pattern {
+  background: var(--primary-color);
+  color: var(--bg-dark);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.history-amounts {
+  display: flex;
+  gap: 24px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.history-amounts .prize {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.error-message {
+  background: rgba(255, 68, 68, 0.1);
+  border: 2px solid #ff4444;
+  color: #ff4444;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .bingo-card {
+    padding: 12px;
+  }
+
+  .bingo-cell {
+    padding: 12px;
+    font-size: 16px;
+    min-height: 40px;
+  }
+
+  .bingo-letter {
+    padding: 8px;
+    font-size: 16px;
+  }
+
+  .bingo-controls {
+    flex-direction: column;
+  }
+
+  .bet-control {
+    width: 100%;
+  }
+
+  .history-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
