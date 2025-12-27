@@ -48,7 +48,7 @@ const Layout = () => {
             <div className="header-content">
               <Link to="/" className="logo">
                 <span className="icon">🎲</span>
-                <h1>Jogo do Bicho</h1>
+                <h1>Tradição do Bicho</h1>
               </Link>
               <nav className="header-nav">
                 {user ? (
@@ -121,7 +121,7 @@ const Layout = () => {
 
         <footer className="footer">
           <div className="container">
-            <p>&copy; 2024 Jogo do Bicho. Todos os direitos reservados.</p>
+            <p>&copy; 2024 Tradição do Bicho. Todos os direitos reservados.</p>
             <p className="warning">
               ⚠️ Jogue com responsabilidade. Apostas podem causar dependência.
             </p>

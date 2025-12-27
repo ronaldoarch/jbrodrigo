@@ -103,12 +103,6 @@ const Inicio = () => {
       </div>
 
       <div className="container">
-        {/* Seção de Boas-vindas */}
-        <section className="welcome-section">
-          <h1 className="welcome-title">Bem-vindo ao LOTBICHO</h1>
-          <p className="welcome-slogan">A maior cotação do mercado</p>
-        </section>
-
         {/* Seção de Cotações ao Vivo */}
         <section className="live-odds-section">
           <h2 className="section-title">COTAÇÃO AO VIVO</h2>
