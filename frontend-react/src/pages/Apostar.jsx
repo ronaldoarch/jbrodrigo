@@ -718,7 +718,7 @@ const Apostar = () => {
 
                   <div className="extractions-list">
                     {extractions
-                      .filter((e) => e.type === 'normal' && e.is_active)
+                      .filter((e) => (e.type === 'normal' || e.type === 'instant') && e.is_active)
                       .map((extraction) => (
                         <label key={extraction.id} className="extraction-item">
                           <input
