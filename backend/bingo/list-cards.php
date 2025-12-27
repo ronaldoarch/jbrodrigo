@@ -17,8 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 try {
-    // Verificar autenticação
-    $user = requireAuth();
+    // Verificar autenticação (retorna o user_id diretamente)
+    $userId = requireAuth();
     
     // Obter parâmetros
     $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 20;
@@ -29,7 +29,7 @@ try {
     
     // Buscar cartelas
     $bingoService = new BingoService();
-    $cards = $bingoService->getUserCards($user['id'], $limit, $offset);
+    $cards = $bingoService->getUserCards($userId, $limit, $offset);
     
     echo json_encode([
         'success' => true,
