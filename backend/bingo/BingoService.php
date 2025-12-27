@@ -29,10 +29,19 @@ class BingoService {
         $this->db->beginTransaction();
         
         try {
-            // Verificar saldo do usuário
-            $wallet = $this->getWallet($userId);
-            if ($wallet['balance'] < $betAmount) {
-                throw new Exception("Saldo insuficiente");
+            // Verificar saldo do usuário (com lock FOR UPDATE para evitar race conditions)
+            $wallet = $this->getWallet($userId, true);
+            
+            if (!$wallet) {
+                // Criar carteira se não existir
+                $createWalletStmt = $this->db->prepare("INSERT INTO wallets (user_id) VALUES (?)");
+                $createWalletStmt->execute([$userId]);
+                $wallet = $this->getWallet($userId, true);
+            }
+            
+            $balance = (float)$wallet['balance'];
+            if ($balance < $betAmount) {
+                throw new Exception("Saldo insuficiente. Saldo atual: R$ " . number_format($balance, 2, ',', '.'));
             }
             
             // Gerar cartela
@@ -201,6 +210,10 @@ class BingoService {
      * @param int $cardId ID da cartela
      */
     private function debitBet($userId, $amount, $cardId) {
+        // Buscar carteira antes do débito para obter o saldo anterior
+        $walletBefore = $this->getWallet($userId);
+        $balanceBefore = $walletBefore ? (float)$walletBefore['balance'] : 0.0;
+        
         $stmt = $this->db->prepare("
             UPDATE wallets 
             SET balance = balance - ?, 
@@ -209,19 +222,22 @@ class BingoService {
         ");
         $stmt->execute([$amount, $amount, $userId]);
         
-        // Criar transação
+        // Buscar carteira após o débito para obter o saldo atual e o ID
         $wallet = $this->getWallet($userId);
+        $balanceAfter = $wallet ? (float)$wallet['balance'] : 0.0;
+        
+        // Criar transação
         $transStmt = $this->db->prepare("
             INSERT INTO wallet_transactions
             (wallet_id, user_id, type, amount, balance_before, balance_after, description, reference_type, reference_id, status)
-            VALUES (?, ?, 'bet', ?, ?, ?, ?, 'bet', ?, 'completed')
+            VALUES (?, ?, 'bet', ?, ?, ?, ?, 'bingo_card', ?, 'completed')
         ");
         $transStmt->execute([
             $wallet['id'],
             $userId,
             $amount,
-            $wallet['balance'] + $amount,
-            $wallet['balance'],
+            $balanceBefore,
+            $balanceAfter,
             "Aposta Bingo - Cartela #{$cardId}",
             $cardId
         ]);
@@ -235,8 +251,9 @@ class BingoService {
      * @param int $cardId ID da cartela
      */
     private function creditPrize($userId, $amount, $cardId) {
-        $wallet = $this->getWallet($userId);
-        $balanceBefore = $wallet['balance'];
+        // Buscar carteira antes do crédito para obter o saldo anterior
+        $walletBefore = $this->getWallet($userId);
+        $balanceBefore = $walletBefore ? (float)$walletBefore['balance'] : 0.0;
         
         $stmt = $this->db->prepare("
             UPDATE wallets 
@@ -246,19 +263,22 @@ class BingoService {
         ");
         $stmt->execute([$amount, $amount, $userId]);
         
-        // Criar transação
+        // Buscar carteira após o crédito para obter o saldo atual e o ID
         $wallet = $this->getWallet($userId);
+        $balanceAfter = $wallet ? (float)$wallet['balance'] : 0.0;
+        
+        // Criar transação
         $transStmt = $this->db->prepare("
             INSERT INTO wallet_transactions
             (wallet_id, user_id, type, amount, balance_before, balance_after, description, reference_type, reference_id, status)
-            VALUES (?, ?, 'prize', ?, ?, ?, ?, 'bet', ?, 'completed')
+            VALUES (?, ?, 'prize', ?, ?, ?, ?, 'bingo_card', ?, 'completed')
         ");
         $transStmt->execute([
             $wallet['id'],
             $userId,
             $amount,
             $balanceBefore,
-            $wallet['balance'],
+            $balanceAfter,
             "Prêmio Bingo - Cartela #{$cardId}",
             $cardId
         ]);
@@ -268,10 +288,15 @@ class BingoService {
      * Busca carteira do usuário
      * 
      * @param int $userId ID do usuário
-     * @return array Dados da carteira
+     * @param bool $forUpdate Se true, adiciona FOR UPDATE para lock da linha
+     * @return array|false Dados da carteira ou false se não encontrada
      */
-    private function getWallet($userId) {
-        $stmt = $this->db->prepare("SELECT * FROM wallets WHERE user_id = ?");
+    private function getWallet($userId, $forUpdate = false) {
+        $sql = "SELECT * FROM wallets WHERE user_id = ?";
+        if ($forUpdate) {
+            $sql .= " FOR UPDATE";
+        }
+        $stmt = $this->db->prepare($sql);
         $stmt->execute([$userId]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
