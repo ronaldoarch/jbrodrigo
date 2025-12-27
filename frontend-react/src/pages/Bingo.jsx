@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
-import Keno from './Keno';
 import './Bingo.css';
+
+// Import dinâmico do Keno para evitar erros de carregamento
+const Keno = lazy(() => import('./Keno'));
 
 const Bingo = () => {
   const [activeTab, setActiveTab] = useState('bingo'); // 'bingo' ou 'keno'
@@ -309,7 +311,9 @@ const Bingo = () => {
             </div>
           </>
         ) : (
-          <Keno />
+          <Suspense fallback={<div className="loading">Carregando Keno...</div>}>
+            <Keno />
+          </Suspense>
         )}
       </div>
     </div>

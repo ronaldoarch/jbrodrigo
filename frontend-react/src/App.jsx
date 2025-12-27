@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
 import { AuthProvider } from './contexts/AuthContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import PrivateRoute from './components/PrivateRoute';
@@ -12,8 +13,10 @@ import MinhasApostas from './pages/MinhasApostas';
 import Carteira from './pages/Carteira';
 import Resultados from './pages/Resultados';
 import Bingo from './pages/Bingo';
-import Keno from './pages/Keno';
 import Admin from './pages/Admin';
+
+// Lazy import do Keno
+const Keno = lazy(() => import('./pages/Keno'));
 
 function App() {
   return (
@@ -127,7 +130,9 @@ function App() {
                 path="keno"
                 element={
                   <PrivateRoute>
-                    <Keno />
+                    <Suspense fallback={<div className="loading"><div className="spinner"></div></div>}>
+                      <Keno />
+                    </Suspense>
                   </PrivateRoute>
                 }
               />
