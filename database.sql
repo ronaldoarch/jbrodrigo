@@ -301,14 +301,96 @@ INSERT INTO `settings` (`setting_key`, `setting_value`, `description`) VALUES
 ('timezone', 'America/Sao_Paulo', 'Timezone do sistema');
 
 -- ============================================
+-- TABELA: odds (Cotações/Multiplicadores)
+-- ============================================
+CREATE TABLE IF NOT EXISTS `odds` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `game_type` VARCHAR(50) NULL COMMENT 'PT RIO, PT SP, LOOK, etc ou NULL para todos',
+    `bet_type` VARCHAR(50) NOT NULL COMMENT 'grupo, milhar, centena, etc',
+    `position` INT NULL COMMENT 'Posição específica (1-7) ou NULL para geral',
+    `multiplier` DECIMAL(10,2) NOT NULL COMMENT 'Multiplicador do prêmio',
+    `min_bet` DECIMAL(10,2) DEFAULT 1.00,
+    `max_bet` DECIMAL(10,2) DEFAULT 10000.00,
+    `is_active` BOOLEAN DEFAULT TRUE,
+    `description` TEXT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX `idx_game_bet` (`game_type`, `bet_type`),
+    INDEX `idx_active` (`is_active`),
+    INDEX `idx_bet_type` (`bet_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================
+-- TABELA: modalities (Modalidades Ativas/Inativas)
+-- ============================================
+CREATE TABLE IF NOT EXISTS `modalities` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `modality_id` VARCHAR(50) UNIQUE NOT NULL COMMENT 'grupo, milhar, centena, etc',
+    `is_active` BOOLEAN DEFAULT TRUE,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX `idx_active` (`is_active`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================
 -- INSERIR EXTRAÇÕES PADRÃO
 -- ============================================
-INSERT INTO `extractions` (`type`, `description`, `close_time`, `game_type`, `days_of_week`, `sort_order`, `is_active`) VALUES
-('normal', 'PPT RIO 11:20', '11:20:00', 'PPT', 'SEGUNDA,TERÇA,QUARTA,QUINTA,SEXTA,SABADO', 1, TRUE),
-('normal', 'PTM MANAUS 11:30', '11:30:00', 'PTM', 'SEGUNDA,TERÇA,QUARTA,QUINTA,SEXTA,SABADO', 2, TRUE),
-('normal', 'PTSP SÃO PAULO 12:00', '12:00:00', 'PTSP', 'SEGUNDA,TERÇA,QUARTA,QUINTA,SEXTA,SABADO', 3, TRUE),
-('normal', 'PTBA BAHIA 13:00', '13:00:00', 'PTBA', 'SEGUNDA,TERÇA,QUARTA,QUINTA,SEXTA,SABADO', 4, TRUE),
-('normal', 'COR CORUJINHA 14:00', '14:00:00', 'COR', 'SEGUNDA,TERÇA,QUARTA,QUINTA,SEXTA,SABADO', 5, TRUE),
-('normal', 'FED FEDERAL 15:00', '15:00:00', 'FED', 'SEGUNDA,TERÇA,QUARTA,QUINTA,SEXTA,SABADO', 6, TRUE),
-('instant', 'INSTANTÂNEA', '23:59:59', 'INSTANTANEA', 'SEGUNDA,TERÇA,QUARTA,QUINTA,SEXTA,SABADO,DOMINGO', 99, TRUE);
+INSERT INTO `extractions` (`type`, `loteria`, `description`, `close_time`, `game_type`, `days_of_week`, `sort_order`, `is_active`) VALUES
+('normal', 'PT RIO', 'PPT RIO 11:20', '11:20:00', 'PPT', 'SEGUNDA,TERÇA,QUARTA,QUINTA,SEXTA,SABADO', 1, TRUE),
+('normal', 'PT RIO', 'PTM MANAUS 11:30', '11:30:00', 'PTM', 'SEGUNDA,TERÇA,QUARTA,QUINTA,SEXTA,SABADO', 2, TRUE),
+('normal', 'PT SP', 'PTSP SÃO PAULO 12:00', '12:00:00', 'PTSP', 'SEGUNDA,TERÇA,QUARTA,QUINTA,SEXTA,SABADO', 3, TRUE),
+('normal', 'PT RIO', 'PTBA BAHIA 13:00', '13:00:00', 'PTBA', 'SEGUNDA,TERÇA,QUARTA,QUINTA,SEXTA,SABADO', 4, TRUE),
+('normal', 'PT RIO', 'COR CORUJINHA 14:00', '14:00:00', 'COR', 'SEGUNDA,TERÇA,QUARTA,QUINTA,SEXTA,SABADO', 5, TRUE),
+('normal', 'FEDERAL', 'FED FEDERAL 15:00', '15:00:00', 'FED', 'SEGUNDA,TERÇA,QUARTA,QUINTA,SEXTA,SABADO', 6, TRUE),
+('instant', 'PARA TODOS', 'INSTANTÂNEA', '23:59:59', 'INSTANTANEA', 'SEGUNDA,TERÇA,QUARTA,QUINTA,SEXTA,SABADO,DOMINGO', 99, TRUE);
+
+-- ============================================
+-- INSERIR COTAÇÕES PADRÃO
+-- ============================================
+INSERT INTO `odds` (`bet_type`, `position`, `multiplier`, `description`, `is_active`) VALUES
+    ('grupo', 1, 20.00, 'Grupo - 1º Prêmio', TRUE),
+    ('grupo', NULL, 20.00, 'Grupo - Geral', TRUE),
+    ('milhar', 1, 6000.00, 'Milhar - 1º Prêmio', TRUE),
+    ('milhar', NULL, 6000.00, 'Milhar - Geral', TRUE),
+    ('centena', 1, 800.00, 'Centena - 1º Prêmio', TRUE),
+    ('centena', NULL, 800.00, 'Centena - Geral', TRUE),
+    ('dezena', 1, 80.00, 'Dezena - 1º Prêmio', TRUE),
+    ('dezena', NULL, 80.00, 'Dezena - Geral', TRUE),
+    ('milhar-centena', 1, 3300.00, 'Milhar/Centena - 1º Prêmio', TRUE),
+    ('milhar-centena', NULL, 3300.00, 'Milhar/Centena - Geral', TRUE),
+    ('dupla-grupo', NULL, 21.75, 'Dupla de Grupo', TRUE),
+    ('terno-grupo', NULL, 150.00, 'Terno de Grupo', TRUE),
+    ('quadra-grupo', NULL, 1000.00, 'Quadra de Grupo', TRUE),
+    ('milhar-invertida', 1, 6000.00, 'Milhar Invertida - 1º Prêmio', TRUE),
+    ('milhar-invertida', NULL, 6000.00, 'Milhar Invertida - Geral', TRUE),
+    ('centena-invertida', 1, 800.00, 'Centena Invertida - 1º Prêmio', TRUE),
+    ('centena-invertida', NULL, 800.00, 'Centena Invertida - Geral', TRUE),
+    ('dezena-invertida', 1, 80.00, 'Dezena Invertida - 1º Prêmio', TRUE),
+    ('dezena-invertida', NULL, 80.00, 'Dezena Invertida - Geral', TRUE),
+    ('duque-dezena', NULL, 350.00, 'Duque de Dezena', TRUE),
+    ('terno-dezena', NULL, 3500.00, 'Terno de Dezena', TRUE),
+    ('passe-vai-1-2', NULL, 180.00, 'Passe Vai 1-2', TRUE),
+    ('passe-vai-1-5', NULL, 90.00, 'Passe Vai 1-5', TRUE),
+    ('passe-vai-vem-1-2', NULL, 90.00, 'Passe Vai-e-Vem 1-2', TRUE),
+    ('passe-vai-vem-1-5', NULL, 45.00, 'Passe Vai-e-Vem 1-5', TRUE);
+
+-- ============================================
+-- INSERIR MODALIDADES PADRÃO
+-- ============================================
+INSERT INTO `modalities` (`modality_id`, `is_active`) VALUES
+    ('grupo', TRUE),
+    ('dupla-grupo', TRUE),
+    ('terno-grupo', TRUE),
+    ('quadra-grupo', TRUE),
+    ('dezena', TRUE),
+    ('dezena-invertida', TRUE),
+    ('centena', TRUE),
+    ('centena-invertida', TRUE),
+    ('milhar', TRUE),
+    ('milhar-invertida', TRUE),
+    ('milhar-centena', TRUE),
+    ('duque-dezena', TRUE),
+    ('terno-dezena', TRUE),
+    ('passe-vai', TRUE),
+    ('passe-vai-vem', TRUE);
 
