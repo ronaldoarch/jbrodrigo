@@ -29,12 +29,20 @@ class BingoValidator {
         $matchedSet = array_flip($matchedNumbers);
         
         // Verificar padrões em ordem de prioridade
+        // Primeiro verifica padrões mais simples (linha/coluna)
+        $lineWon = self::checkRows($card, $matchedSet);
+        $columnWon = self::checkColumns($card, $matchedSet);
+        $diagonalPrincipalWon = self::checkDiagonal($card, $matchedSet, 'principal');
+        $diagonalSecundariaWon = self::checkDiagonal($card, $matchedSet, 'secundaria');
+        $fullCardWon = self::checkFullCard($card, $matchedSet);
+        
         $patterns = [
-            'cheia' => self::checkFullCard($card, $matchedSet),
-            'diagonal_principal' => self::checkDiagonal($card, $matchedSet, 'principal'),
-            'diagonal_secundaria' => self::checkDiagonal($card, $matchedSet, 'secundaria'),
-            'linha' => self::checkRows($card, $matchedSet),
-            'coluna' => self::checkColumns($card, $matchedSet)
+            'cheia' => $fullCardWon,
+            'diagonal_principal' => $diagonalPrincipalWon,
+            'diagonal_secundaria' => $diagonalSecundariaWon,
+            'diagonal' => $diagonalPrincipalWon || $diagonalSecundariaWon,
+            'linha' => $lineWon,
+            'coluna' => $columnWon
         ];
         
         foreach ($patterns as $pattern => $won) {

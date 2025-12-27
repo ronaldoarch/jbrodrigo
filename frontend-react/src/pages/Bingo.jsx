@@ -169,6 +169,7 @@ const Bingo = () => {
       'coluna': 'Coluna',
       'diagonal_principal': 'Diagonal Principal',
       'diagonal_secundaria': 'Diagonal Secundária',
+      'diagonal': 'Diagonal',
       'cheia': 'Cartela Cheia'
     };
     return names[pattern] || pattern;
