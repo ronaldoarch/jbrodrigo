@@ -736,7 +736,12 @@ const Apostar = () => {
                           />
                           <div className="extraction-info">
                             <span className="extraction-name">{extraction.description}</span>
-                            <span className="extraction-time">Fecha às {extraction.close_time}</span>
+                            <span className="extraction-time">
+                              {extraction.type === 'instant' 
+                                ? 'Aposta Instantânea' 
+                                : `Fecha às ${extraction.close_time}`
+                              }
+                            </span>
                           </div>
                         </label>
                       ))}
