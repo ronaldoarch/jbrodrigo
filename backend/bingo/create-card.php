@@ -17,8 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 try {
-    // Verificar autenticação
-    $user = requireAuth();
+    // Verificar autenticação (retorna o user_id diretamente, não um array)
+    $userId = requireAuth();
     
     // Obter dados
     $data = json_decode(file_get_contents('php://input'), true);
@@ -32,7 +32,7 @@ try {
     
     // Criar cartela
     $bingoService = new BingoService();
-    $card = $bingoService->createCard($user['id'], $betAmount);
+    $card = $bingoService->createCard($userId, $betAmount);
     
     echo json_encode([
         'success' => true,
