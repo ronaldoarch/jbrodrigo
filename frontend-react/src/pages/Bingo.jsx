@@ -160,7 +160,7 @@ const Bingo = () => {
           <h3>Cartela de Bingo</h3>
           {card.prize_amount > 0 && (
             <div className="prize-badge">
-              Prêmio: R$ {parseFloat(card.prize_amount).toFixed(2)}
+              Prêmio: R$ {typeof card.prize_amount === 'number' ? card.prize_amount.toFixed(2) : parseFloat(card.prize_amount || 0).toFixed(2)}
             </div>
           )}
         </div>
@@ -259,7 +259,7 @@ const Bingo = () => {
                 </button>
                 {balance < betAmount && (
                   <p className="insufficient-balance-warning">
-                    Saldo insuficiente. Saldo atual: R$ {balance.toFixed(2)}
+                    Saldo insuficiente. Saldo atual: R$ {typeof balance === 'number' ? balance.toFixed(2) : parseFloat(balance || 0).toFixed(2)}
                   </p>
                 )}
               </div>
@@ -297,7 +297,7 @@ const Bingo = () => {
                           </span>
                           {cardItem.prize_amount > 0 && (
                             <span className="history-prize">
-                              +R$ {parseFloat(cardItem.prize_amount).toFixed(2)}
+                              +R$ {typeof cardItem.prize_amount === 'number' ? cardItem.prize_amount.toFixed(2) : parseFloat(cardItem.prize_amount || 0).toFixed(2)}
                             </span>
                           )}
                         </div>
