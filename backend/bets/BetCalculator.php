@@ -8,23 +8,9 @@ class BetCalculator {
     
     /**
      * Multiplicadores oficiais por modalidade
+     * Agora busca do banco de dados, com fallback para valores padrão
      */
-    private static $multipliers = [
-        'grupo' => 20,
-        'dezena' => 80,
-        'centena' => 800,
-        'milhar' => 6000,
-        'milhar-centena' => 3300,
-        'dupla-grupo' => 21.75,
-        'terno-grupo' => 150,
-        'quadra-grupo' => 1000,
-        'duque-dezena' => 350,
-        'terno-dezena' => 3500,
-        'passe-vai-1-2' => 180,
-        'passe-vai-1-5' => 90,
-        'passe-vai-vem-1-2' => 90,
-        'passe-vai-vem-1-5' => 45
-    ];
+    private static $multipliers = null; // Carregado dinamicamente
     
     /**
      * Calcula o número de unidades para uma aposta
@@ -107,8 +93,33 @@ class BetCalculator {
     
     /**
      * Obtém o multiplicador para uma modalidade
+     * Busca do banco de dados primeiro, depois fallback para valores padrão
      */
-    public static function getMultiplier($modality, $positions = null) {
+    public static function getMultiplier($modality, $positions = null, $gameType = null) {
+        // Tentar usar OddsManager se disponível
+        if (class_exists('OddsManager')) {
+            require_once __DIR__ . '/OddsManager.php';
+            return OddsManager::getMultiplier($modality, $positions, $gameType);
+        }
+        
+        // Fallback para valores padrão (hardcoded)
+        $defaultMultipliers = [
+            'grupo' => 20,
+            'dezena' => 80,
+            'centena' => 800,
+            'milhar' => 6000,
+            'milhar-centena' => 3300,
+            'dupla-grupo' => 21.75,
+            'terno-grupo' => 150,
+            'quadra-grupo' => 1000,
+            'duque-dezena' => 350,
+            'terno-dezena' => 3500,
+            'passe-vai-1-2' => 180,
+            'passe-vai-1-5' => 90,
+            'passe-vai-vem-1-2' => 90,
+            'passe-vai-vem-1-5' => 45
+        ];
+        
         // Para passe-vai e passe-vai-vem, o multiplicador depende das posições
         if ($modality === 'passe-vai' || $modality === 'passe-vai-vem') {
             $positionsArray = self::parsePositions($positions);
@@ -117,20 +128,20 @@ class BetCalculator {
             
             if ($modality === 'passe-vai') {
                 if ($firstPos == 1 && $lastPos == 2) {
-                    return self::$multipliers['passe-vai-1-2'];
+                    return $defaultMultipliers['passe-vai-1-2'];
                 } elseif ($firstPos == 1 && $lastPos == 5) {
-                    return self::$multipliers['passe-vai-1-5'];
+                    return $defaultMultipliers['passe-vai-1-5'];
                 }
             } else {
                 if ($firstPos == 1 && $lastPos == 2) {
-                    return self::$multipliers['passe-vai-vem-1-2'];
+                    return $defaultMultipliers['passe-vai-vem-1-2'];
                 } elseif ($firstPos == 1 && $lastPos == 5) {
-                    return self::$multipliers['passe-vai-vem-1-5'];
+                    return $defaultMultipliers['passe-vai-vem-1-5'];
                 }
             }
         }
         
-        return self::$multipliers[$modality] ?? 1;
+        return $defaultMultipliers[$modality] ?? 1;
     }
     
     /**

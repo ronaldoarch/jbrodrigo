@@ -33,7 +33,12 @@ CREATE TABLE IF NOT EXISTS `wallets` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `user_id` INT NOT NULL UNIQUE,
     `balance` DECIMAL(12,2) DEFAULT 0.00,
-    `bonus_balance` DECIMAL(12,2) DEFAULT 0.00,
+    `bonus` DECIMAL(12,2) DEFAULT 0.00,
+    `locked_balance` DECIMAL(12,2) DEFAULT 0.00,
+    `total_deposited` DECIMAL(12,2) DEFAULT 0.00,
+    `total_withdrawn` DECIMAL(12,2) DEFAULT 0.00,
+    `total_wagered` DECIMAL(12,2) DEFAULT 0.00,
+    `total_won` DECIMAL(12,2) DEFAULT 0.00,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
@@ -45,6 +50,7 @@ CREATE TABLE IF NOT EXISTS `wallets` (
 CREATE TABLE IF NOT EXISTS `extractions` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `type` ENUM('normal', 'instant') NOT NULL DEFAULT 'normal',
+    `loteria` VARCHAR(50) NULL COMMENT 'PT RIO, PT SP, LOOK, LOTECE, LOTEP, FEDERAL, NACIONAL, PARA TODOS',
     `description` VARCHAR(120) NOT NULL COMMENT 'PPT, PTM, PTSP, PTBA, etc.',
     `close_time` TIME NOT NULL COMMENT 'Horário de fechamento',
     `extraction_date` DATE NULL COMMENT 'Data do sorteio (NULL para horários recorrentes)',
@@ -77,6 +83,7 @@ CREATE TABLE IF NOT EXISTS `extractions` (
     INDEX `idx_date` (`extraction_date`),
     INDEX `idx_status` (`status`),
     INDEX `idx_game_type` (`game_type`),
+    INDEX `idx_loteria` (`loteria`),
     INDEX `idx_extractions_active` (`is_active`),
     INDEX `idx_extractions_order` (`sort_order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
