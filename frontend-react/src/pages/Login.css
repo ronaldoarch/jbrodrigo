@@ -105,13 +105,26 @@
   background: var(--bg-card);
   border: 2px solid var(--border-color);
   border-radius: 12px;
-  color: var(--text-primary);
+  color: #ffffff !important;
   font-size: 16px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-text-fill-color: #ffffff !important;
 }
 
 .form-group input::placeholder {
   color: var(--text-muted);
+  opacity: 1;
+  -webkit-text-fill-color: var(--text-muted);
+}
+
+.form-group input:-webkit-autofill,
+.form-group input:-webkit-autofill:hover,
+.form-group input:-webkit-autofill:focus,
+.form-group input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px var(--bg-card) inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  color: #ffffff !important;
+  background-color: var(--bg-card) !important;
 }
 
 .form-group input:focus {
@@ -119,6 +132,8 @@
   box-shadow: 0 0 0 4px rgba(234, 170, 1, 0.2), var(--shadow-md);
   background: var(--bg-card-hover);
   outline: none;
+  -webkit-text-fill-color: #ffffff !important;
+  color: #ffffff !important;
 }
 
 .form-group input:disabled {
