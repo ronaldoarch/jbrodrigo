@@ -117,7 +117,7 @@ const Inicio = () => {
                   <div className="odds-number">{mod.number}.</div>
                   <h3 className="odds-name">{odd.name || mod.name}</h3>
                   <div className="odds-value">
-                    1x R$ {multiplier.toFixed(2).replace('.', ',')}
+                    1x R$ {(typeof multiplier === 'number' ? multiplier : parseFloat(multiplier || 0)).toFixed(2).replace('.', ',')}
                   </div>
                   <button
                     className="btn-play"

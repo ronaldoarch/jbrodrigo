@@ -92,7 +92,9 @@ const Layout = () => {
                       </Link>
                     )}
                     <span className="balance">
-                      R$ {user.wallet?.balance?.toFixed(2) || '0.00'}
+                      R$ {user.wallet?.balance !== undefined && typeof user.wallet.balance === 'number' 
+                        ? user.wallet.balance.toFixed(2) 
+                        : (user.wallet?.balance ? parseFloat(user.wallet.balance).toFixed(2) : '0.00')}
                     </span>
                     <button 
                       onClick={logout} 
